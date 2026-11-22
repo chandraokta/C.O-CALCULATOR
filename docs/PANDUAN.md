@@ -18,8 +18,8 @@ lalu tombolnya, atau **tahan** tombol tersebut sekitar setengah detik.
 
 | Bagian | Keterangan |
 |---|---|
-| **LCD hijau** | Menampilkan ekspresi di baris atas dan hasil di baris utama. Status `DEG`, `M`, `2nd`, `HYP`, dan format tampil di sini. |
-| **Baris utilitas** | `≡` menu, `DRG▸` ganti sudut, `TAB` jumlah digit, `RCL` buka memori, `STO` simpan memori, `M−` kurangi memori. |
+| **LCD hijau** | Menampilkan ekspresi di baris atas dan angka yang sedang diketik di baris utama. **Hasil baru muncul setelah `=` ditekan.** |
+| **Baris utilitas** | `MENU` pengaturan, `DRG▸` ganti sudut, `TAB` jumlah digit, `RCL` buka memori, `STO` simpan memori, `M−` kurangi memori. |
 | **Blok fungsi** | `SHIFT`, `DRG`, `FSE`, `MR`, `MS`, `M+`; `hyp`, `sin`, `cos`, `tan`, `ln`, `log`; `yˣ`, `√`, `x²`, `%`, `(`, `)`. |
 | **Blok angka** | `7 8 9 DEL AC`, `4 5 6 × ÷`, `1 2 3 + −`, `0 ± . EXP =`. |
 | **Legenda kuning** | Fungsi alternatif: `n!`, `nCr`, `nPr`, `DEC`, `HEX`, `π`, `e`, `OCT`, `BIN`, `CONV`, `CNST`, `MOD`, `ANS`, `sin⁻¹`, `cos⁻¹`, `tan⁻¹`, `eˣ`, `10ˣ`, `x³`, `1/x`, `∛`. |
@@ -30,6 +30,17 @@ pengaturan.
 ---
 
 ## 2. Perhitungan dasar
+
+### Kapan hasil muncul?
+
+Saat mengetik, LCD utama menampilkan angka yang sedang dimasukkan, bukan hasil sementara.
+Tekan `=` untuk menghitung. Contoh:
+
+- `2 + 3` → LCD menampilkan `3`; setelah `=` → **5**.
+- `sin` `30` → LCD menampilkan `30`; setelah `=` → **0.5**.
+
+Aplikasi otomatis menutup kurung fungsi saat `=` ditekan, jadi `sin 30 =` sama dengan
+`sin(30) =`. Ini juga berlaku untuk `cos`, `tan`, `ln`, `log`, `√`, `∛`, dan fungsi lainnya.
 
 ### Angka dan operator
 
@@ -279,7 +290,7 @@ Contoh: hitung `255`, lalu `SHIFT` + `AC`:
 
 ## 12. Pengaturan
 
-Buka dengan tombol `≡` di baris utilitas (portrait) atau `SET` (landscape).
+Buka dengan tombol `MENU` di baris utilitas (portrait) atau `SET` (landscape).
 
 | Baris | Pilihan |
 |---|---|
@@ -295,6 +306,11 @@ Buka dengan tombol `≡` di baris utilitas (portrait) atau `SET` (landscape).
 | **About COKALKU** | info versi |
 
 Perubahan langsung diterapkan dan disimpan. Tema juga mengubah warna body, tombol, dan LCD.
+
+**Getar dan suara:** keduanya aktif secara default. Jika getar tidak terasa, pastikan
+pengaturan getar sistem menyala dan perangkat memiliki motor getar. Jika suara tidak terdengar,
+naikkan volume media; suara tombol diputar melalui SoundPool dan tidak bergantung pada
+pengaturan “touch sounds” sistem.
 
 ---
 
@@ -359,4 +375,5 @@ Contoh lain yang sudah diuji:
 - [Desain FigCraft](../design/cokalku-sc100.figcraft)
 - [Screenshot aplikasi](../design/app)
 - [Build script](../app/build.ps1)
+
 

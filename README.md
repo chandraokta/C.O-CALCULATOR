@@ -19,8 +19,8 @@ These captures are from the actual APK on an Android 11 x86_64 emulator (1080 ×
 | **Calculator:** the full instrument, edge to edge, with the seven-segment LCD. | **Live calculation:** `sin(30)` in DEG mode evaluates to exactly `0.5` on the LCD. |
 | ![Result history](design/app/02-history.png) | ![Unit converter](design/app/03-converter.png) |
 | **Result history** opens from `SHIFT` + `=` (the `ANS` legend). Tap any row to reuse it. | **Unit converter** keeps the current value and converts into every listed unit live. |
-| ![Landscape](design/app/04-landscape.png) | |
-| **Landscape console:** ten columns, all scientific functions and a `SET` key. | |
+| ![Landscape](design/app/04-landscape.png) | ![Settings](design/app/07-settings.png) |
+| **Landscape console:** ten columns, all scientific functions and a `SET` key. | **Settings:** larger labels and values, plus working haptics and key sound. |
 
 ![Ukuran layar yang diuji](design/app/06-responsive.png)
 
@@ -56,7 +56,7 @@ Panduan lengkap semua tombol, fitur, dan contoh perhitungan ada di
 
 - `SHIFT` + tombol = fungsi kuning (atau tahan tombol).
 - `SHIFT` + `1` = konverter, `SHIFT` + `2` = konstanta, `SHIFT` + `3` = `mod`.
-- `SHIFT` + `=` = riwayat hasil; `≡` = pengaturan.
+- `SHIFT` + `=` = riwayat hasil; `MENU` = pengaturan.
 
 ## Features
 
@@ -151,6 +151,7 @@ Feature and interaction inspiration: [RealCalc Scientific Calculator on Google P
 and the APK supplied in this workspace for study. The seven-segment typeface is
 [DSEG7 Classic](https://github.com/keshikan/DSEG) (SIL Open Font License); its license is
 included at `app/assets/fonts/DSEG-OFL.txt`; the runtime copy is `app/res/raw/dseg.ttf`.
+
 
 
 

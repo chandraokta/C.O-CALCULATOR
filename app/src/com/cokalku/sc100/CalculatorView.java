@@ -12,8 +12,12 @@ import android.graphics.RadialGradient;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.Typeface;
+import android.media.AudioAttributes;
+import android.media.SoundPool;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
@@ -54,6 +58,10 @@ public class CalculatorView extends View {
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Handler handler = new Handler(Looper.getMainLooper());
+    private SoundPool soundPool;
+    private int clickSound;
+    private volatile boolean clickReady;
+    private Vibrator vibrator;
 
     private Bitmap chrome;
     private int W, H;
@@ -130,8 +138,31 @@ public class CalculatorView extends View {
         lightFace = Typeface.create("sans-serif-light", Typeface.NORMAL);
         dseg = loadSegFont(c);
         setLayerType(LAYER_TYPE_SOFTWARE, null);
+        setHapticFeedbackEnabled(true);
         setFocusable(true);
         setFocusableInTouchMode(true);
+        vibrator = (Vibrator) c.getSystemService(Context.VIBRATOR_SERVICE);
+        try {
+            AudioAttributes attrs = new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build();
+            soundPool = new SoundPool.Builder().setMaxStreams(4).setAudioAttributes(attrs).build();
+            clickSound = soundPool.load(c, R.raw.key_click, 1);
+            soundPool.setOnLoadCompleteListener((sp, id, status) -> {
+                clickReady = status == 0;
+                android.util.Log.d("COKALKU", "key click loaded: " + status);
+            });
+        } catch (Exception e) {
+            soundPool = null;
+        }
+    }
+
+    @Override protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (soundPool != null) {
+            soundPool.release();
+            soundPool = null;
+        }
     }
 
     public Mode mode() { return mode; }
@@ -175,7 +206,7 @@ public class CalculatorView extends View {
         float ux = 18, uy = 226, uw = 376, uh = 26, ug = 7;
         float ucw = (uw - 5 * ug) / 6;
         String[][] utils = {
-                {"≡", "menu"}, {"DRG▸", "drg"}, {"TAB", "tab"},
+                {"MENU", "menu"}, {"DRG▸", "drg"}, {"TAB", "tab"},
                 {"RCL", "recall"}, {"STO", "store"}, {"M−", "mminus"}
         };
         for (int i = 0; i < utils.length; i++) {
@@ -686,16 +717,44 @@ public class CalculatorView extends View {
     private String displayText() {
         if (errorState) return "Error";
         if (justEvaluated) return format(lastResult);
-        if (expr.isEmpty()) return format(lastResult);
-        try {
-            return format(CalcEngine.eval(expr, engineCtx()));
-        } catch (Exception e) {
-            String trimmed = trimIncomplete(expr);
-            if (!trimmed.isEmpty() && !trimmed.equals(expr)) {
-                try { return format(CalcEngine.eval(trimmed, engineCtx())); } catch (Exception ignored) {}
+        if (expr.isEmpty()) return "0";
+        // While typing, show the current entry, never a live result. The result appears on =.
+        return currentEntry();
+    }
+
+    /** The numeric token being typed, e.g. "30" in "sin(30" or "3" in "2+3". */
+    private String currentEntry() {
+        String s = expr.trim();
+        if (s.isEmpty()) return "0";
+        if (s.equals("Ans")) return format(lastResult);
+        int end = s.length();
+        char last = s.charAt(end - 1);
+        if (last == ')' || last == '!' || last == '%' || last == 'π') return "0";
+        if (isOp(last)) {
+            end--;
+            while (end > 0 && Character.isWhitespace(s.charAt(end - 1))) end--;
+        }
+        int start = end;
+        while (start > 0) {
+            char ch = s.charAt(start - 1);
+            if (Character.isDigit(ch) || ch == '.') { start--; continue; }
+            if ((ch == 'e' || ch == 'E') && start < end) { start--; continue; }
+            if ((ch == '-' || ch == '+') && start >= 2 && (s.charAt(start - 2) == 'e' || s.charAt(start - 2) == 'E')) {
+                start--; continue;
             }
+            break;
+        }
+        if (start == end) {
+            if (s.startsWith("Ans")) return format(lastResult);
             return "0";
         }
+        String r = s.substring(start, end);
+        if (start > 0 && s.charAt(start - 1) == '-') r = "-" + r;
+        return r;
+    }
+
+    private boolean isOp(char c) {
+        return c == '+' || c == '−' || c == '-' || c == '×' || c == '÷' || c == '*' || c == '/' || c == '^';
     }
 
     private String trimIncomplete(String s) {
@@ -804,13 +863,15 @@ public class CalculatorView extends View {
 
     private void equals() {
         if (expr.trim().isEmpty()) return;
+        String candidate = completeExpression(expr);
         try {
-            BigDecimal v = CalcEngine.eval(expr, engineCtx());
+            BigDecimal v = CalcEngine.eval(candidate, engineCtx());
             lastResult = v;
-            lastExpr = expr;
+            lastExpr = candidate;
+            android.util.Log.d("COKALKU", "eval " + candidate + " = " + v.toPlainString());
             justEvaluated = true;
             String shown = format(v);
-            history.add(0, new HistoryItem(expr, shown, v.stripTrailingZeros().toPlainString(), System.currentTimeMillis()));
+            history.add(0, new HistoryItem(candidate, shown, v.stripTrailingZeros().toPlainString(), System.currentTimeMillis()));
             while (history.size() > 50) history.remove(history.size() - 1);
             prefs.saveHistory(history);
             errorState = false;
@@ -824,6 +885,24 @@ public class CalculatorView extends View {
             errorMessage = "Error";
         }
         invalidate();
+    }
+
+    /**
+     * Real calculators close an open function on =, so "sin 30 =" means sin(30).
+     * It also drops a trailing decimal point, e.g. "2." to "2".
+     */
+    private String completeExpression(String raw) {
+        String s = raw.trim();
+        if (s.endsWith(".")) s = s.substring(0, s.length() - 1);
+        int open = 0;
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c == '(') open++;
+            else if (c == ')' && open > 0) open--;
+        }
+        StringBuilder b = new StringBuilder(s);
+        while (open-- > 0) b.append(')');
+        return b.toString();
     }
 
     private void toggleSign() {
@@ -1044,13 +1123,33 @@ public class CalculatorView extends View {
     private void feedback(boolean longPress) {
         if (prefs.haptics()) {
             performHapticFeedback(longPress ? HapticFeedbackConstants.LONG_PRESS : HapticFeedbackConstants.VIRTUAL_KEY);
+            vibrate(longPress ? 28 : 16);
         }
         if (prefs.sound()) {
-            try {
-                android.media.AudioManager am = (android.media.AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
-                if (am != null) am.playSoundEffect(android.media.AudioManager.FX_KEYPRESS_STANDARD);
-            } catch (Exception ignored) {}
+            if (soundPool != null && clickSound != 0 && clickReady) {
+                if (soundPool.play(clickSound, 0.8f, 0.8f, 1, 0, 1.0f) == 0) fallbackClick();
+            } else {
+                fallbackClick();
+            }
         }
+    }
+
+    private void fallbackClick() {
+        try {
+            android.media.AudioManager am = (android.media.AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
+            if (am != null) am.playSoundEffect(android.media.AudioManager.FX_KEYPRESS_STANDARD);
+        } catch (Exception ignored) {}
+    }
+
+    private void vibrate(int ms) {
+        if (vibrator == null || !vibrator.hasVibrator()) return;
+        try {
+            if (Build.VERSION.SDK_INT >= 26) {
+                vibrator.vibrate(VibrationEffect.createOneShot(ms, VibrationEffect.DEFAULT_AMPLITUDE));
+            } else {
+                vibrator.vibrate(ms);
+            }
+        } catch (Exception ignored) {}
     }
 
     // ---------------------------------------------------------------- overlays (stubs, filled below)
@@ -1534,7 +1633,7 @@ public class CalculatorView extends View {
     }
 
     private void drawSettings(Canvas c) {
-        setupPanel(c, "SETTINGS", "INSTRUMENT PREFERENCES", 0.86f, 0.72f);
+        setupPanel(c, "SETTINGS", "INSTRUMENT PREFERENCES", 0.86f, 0.80f);
         String[] labels = {"Theme", "Angle mode", "Number format", "Digits", "Grouping",
                 "Haptics", "Key sound", "Keep awake", "Reset instrument", "About COKALKU"};
         String[] values = {
@@ -1547,7 +1646,7 @@ public class CalculatorView extends View {
                 prefs.sound() ? "ON" : "OFF",
                 prefs.keepAwake() ? "ON" : "OFF",
                 "TOUCH TO RESET",
-                "SC-100 · 1.0"
+                "SC-100 · 1.1"
         };
         float top = panel.top + ps(74);
         float footer = panel.bottom - ps(14);
@@ -1555,8 +1654,8 @@ public class CalculatorView extends View {
         for (int i = 0; i < labels.length; i++) {
             float y = top + i * rowH;
             if (i % 2 == 0) card(c, new RectF(panel.left + ps(8), y, panel.right - ps(8), y + rowH - ps(2)), 0x06FFFFFF, 0, ps(5), false);
-            text(c, labels[i], panel.left + ps(18), y + rowH * 0.58f, ps(7.2f), 0xFFDCDCE3, medium, Paint.Align.LEFT);
-            text(c, values[i], panel.right - ps(20), y + rowH * 0.58f, ps(6.4f),
+            text(c, labels[i], panel.left + ps(18), y + rowH * 0.60f, ps(11.0f), 0xFFDCDCE3, medium, Paint.Align.LEFT);
+            text(c, values[i], panel.right - ps(20), y + rowH * 0.60f, ps(9.5f),
                     i == 8 ? 0xFFE7A0A0 : 0xFFA99BFF, boldFace, Paint.Align.RIGHT);
             c.drawLine(panel.left + ps(18), y + rowH - ps(1), panel.right - ps(18), y + rowH - ps(1), linePaint(0x14FFFFFF, 0.6f));
         }
@@ -1660,6 +1759,16 @@ public class CalculatorView extends View {
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

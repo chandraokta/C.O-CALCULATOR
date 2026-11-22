@@ -16,6 +16,10 @@ public final class Prefs {
 
     public Prefs(Context c) {
         sp = c.getSharedPreferences(FILE, Context.MODE_PRIVATE);
+        // One-time migration: earlier builds defaulted key sound off, so users never heard it.
+        if (!sp.getBoolean("soundDefault2", false)) {
+            sp.edit().putBoolean("sound", true).putBoolean("soundDefault2", true).apply();
+        }
     }
 
     public int angle() { return sp.getInt("angle", 0); }
@@ -33,7 +37,7 @@ public final class Prefs {
     public boolean haptics() { return sp.getBoolean("haptics", true); }
     public void setHaptics(boolean v) { sp.edit().putBoolean("haptics", v).apply(); }
 
-    public boolean sound() { return sp.getBoolean("sound", false); }
+    public boolean sound() { return sp.getBoolean("sound", true); }
     public void setSound(boolean v) { sp.edit().putBoolean("sound", v).apply(); }
 
     public boolean keepAwake() { return sp.getBoolean("keepAwake", true); }
@@ -91,5 +95,7 @@ public final class Prefs {
 
     public void clearHistory() { sp.edit().putString("history", "[]").apply(); }
 }
+
+
 
 
