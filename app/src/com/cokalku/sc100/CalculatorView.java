@@ -151,7 +151,7 @@ public class CalculatorView extends View {
         landscape = w > h * 1.2f;
         SX = landscape ? w / LW : w / PW;
         SY = landscape ? h / LH : h / PH;
-        S = Math.min(SX, SY);
+        S = landscape ? Math.min(SY, SX * 1.18f) : Math.min(SX, SY * 1.12f);
         buildKeys();
         buildChrome();
     }
@@ -1660,6 +1660,7 @@ public class CalculatorView extends View {
         }
     }
 }
+
 
 
 

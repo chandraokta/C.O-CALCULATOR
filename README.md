@@ -34,6 +34,7 @@ These captures are from the actual APK on an Android 11 x86_64 emulator (1080 ×
 | [`app/build.ps1`](app/build.ps1) | Reproducible build without Gradle |
 | [`docs/DESIGN.md`](docs/DESIGN.md) | Design system, dimensions and visual decisions |
 | [`docs/PANDUAN.md`](docs/PANDUAN.md) | Panduan lengkap semua fitur dan contoh perhitungan |
+| [`docs/RESPONSIVE.md`](docs/RESPONSIVE.md) | Matriks pengujian berbagai ukuran layar |
 
 ## The four designed screens
 
@@ -146,6 +147,7 @@ Feature and interaction inspiration: [RealCalc Scientific Calculator on Google P
 and the APK supplied in this workspace for study. The seven-segment typeface is
 [DSEG7 Classic](https://github.com/keshikan/DSEG) (SIL Open Font License); its license is
 included at `app/assets/fonts/DSEG-OFL.txt`; the runtime copy is `app/res/raw/dseg.ttf`.
+
 
 
 
