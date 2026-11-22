@@ -22,6 +22,10 @@ These captures are from the actual APK on an Android 11 x86_64 emulator (1080 ×
 | ![Landscape](design/app/04-landscape.png) | |
 | **Landscape console:** ten columns, all scientific functions and a `SET` key. | |
 
+![Ukuran layar yang diuji](design/app/06-responsive.png)
+
+Diuji pada 480 × 800, 1080 × 1920, 1080 × 2400, 1600 × 2560 (tablet), 800 × 480, dan 1920 × 1200 (landscape tablet).
+
 ## What is in this repository
 
 | Path | What it is |
@@ -147,6 +151,7 @@ Feature and interaction inspiration: [RealCalc Scientific Calculator on Google P
 and the APK supplied in this workspace for study. The seven-segment typeface is
 [DSEG7 Classic](https://github.com/keshikan/DSEG) (SIL Open Font License); its license is
 included at `app/assets/fonts/DSEG-OFL.txt`; the runtime copy is `app/res/raw/dseg.ttf`.
+
 
 
 

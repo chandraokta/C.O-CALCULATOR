@@ -1,7 +1,11 @@
 # COKALKU — responsivitas layar
 
 COKALKU menggambar seluruh antarmuka di atas `Canvas`, jadi ukuran tidak bergantung pada
-layout XML. Geometri memakai kanvas virtual **412 × 915** (portrait) dan **915 × 412**
+layout XML.
+
+![Matriks ukuran layar](../design/app/06-responsive.png)
+
+Geometri memakai kanvas virtual **412 × 915** (portrait) dan **915 × 412**
 (landscape), lalu dipetakan ke ukuran layar sebenarnya.
 
 ## Rumus yang dipakai
@@ -50,3 +54,4 @@ dan bitmap chrome — tanpa membuat ulang proses atau kehilangan perhitungan.
 - Layout landscape aktif saat lebar > tinggi × 1,2.
 - Di layar sangat kecil, teks overlay memang kecil, tetapi tidak terpotong; pengaturan
   tetap dapat dibaca dan disentuh.
+
