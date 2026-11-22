@@ -1,0 +1,15 @@
+# Build output and local toolchains
+.tools/
+app/build/
+*.idsig
+*.keystore
+
+# Study material for the reference app — not part of COKALKU, and not redistributable
+reference/
+RealCalc*.apk
+
+# OS / IDE noise
+.DS_Store
+Thumbs.db
+.idea/
+*.iml
