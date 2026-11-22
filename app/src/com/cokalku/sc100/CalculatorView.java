@@ -458,15 +458,15 @@ public class CalculatorView extends View {
         p.setStyle(Paint.Style.FILL);
 
         if (k.legend != null && !k.legend.isEmpty()) {
-            float lSize = k.w >= 60 ? 12.0f : 10.0f;
-            text(c, k.legend, x + w / 2f, y + ps(k.w >= 60 ? 11 : 10), ps(lSize), 0xFFD9B64B, boldFace, Paint.Align.CENTER);
+            float lSize = 12.0f;
+            text(c, k.legend, x + w / 2f, y + ps(11), ps(lSize), 0xFFD9B64B, boldFace, Paint.Align.CENTER);
         }
         Paint.Align al = Paint.Align.CENTER;
         float size = ps(k.size);
         Typeface tf = k.bold ? boldFace : (isNumber(k.label) || isOperator(k.label) ? lightFace : sans);
         if (k.label.equals("×") || k.label.equals("÷") || k.label.equals("+") || k.label.equals("−")) tf = lightFace;
         int col = k.kind == 1 ? 0xFF1C1604 : (k.kind == 2 ? Color.WHITE : (k.blue ? 0xFFA0A0FF : txt));
-        float cy = y + h * (k.legend != null && !k.legend.isEmpty() ? (k.w >= 60 ? 0.66f : 0.65f) : 0.52f);
+        float cy = y + h * (k.legend != null && !k.legend.isEmpty() ? 0.66f : 0.52f);
         textPaint.reset();
         textPaint.setAntiAlias(true);
         textPaint.setTypeface(tf);
@@ -1660,6 +1660,7 @@ public class CalculatorView extends View {
         }
     }
 }
+
 
 
 

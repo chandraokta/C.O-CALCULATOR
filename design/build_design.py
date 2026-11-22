@@ -148,7 +148,7 @@ def key(x, y, w, h, label, kind="num", size=28, legend=None, legend_x=None,
     if legend:
         lx = legend_x if legend_x is not None else x
         lw = legend_w if legend_w is not None else w
-        lsize = 11.5 if w > 60 else 9.6
+        lsize = 11.5
         text(lx, y - 12.5, lw, 12, legend, size=lsize, color=YELLOW_T,
              style="Bold", align="center", valign="top", parent=parent,
              name="legend " + legend, ls=0.2, auto=True)
@@ -612,6 +612,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
