@@ -4,7 +4,7 @@ app/build/
 *.idsig
 *.keystore
 
-# Study material for the reference app — not part of COKALKU, and not redistributable
+# Study material for the reference app — not part of C.O CALCULATOR, and not redistributable
 reference/
 RealCalc*.apk
 
@@ -13,3 +13,4 @@ RealCalc*.apk
 Thumbs.db
 .idea/
 *.iml
+

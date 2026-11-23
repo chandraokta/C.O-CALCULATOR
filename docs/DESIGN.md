@@ -1,4 +1,4 @@
-# COKALKU SC-100 — design notes
+# C.O CALCULATOR SC-100 — design notes
 
 ## Canvas
 
@@ -72,4 +72,5 @@ The app computes these positions proportionally from the real screen size. Text 
 
 `design/build_design.py` is the repeatable generator. It writes staged JSON command scripts,
 runs `figcraft-cli run`, and exports with `figcraft-cli export --scale 2`.
+
 

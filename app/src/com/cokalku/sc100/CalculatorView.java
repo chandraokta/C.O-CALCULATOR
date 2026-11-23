@@ -401,13 +401,13 @@ public class CalculatorView extends View {
     }
 
     private void drawBrand(Canvas c, float x, float y, float w, float h) {
-        spacedText(c, "COKALKU", x, y + ps(8), ps(11), theme.light ? 0xFF3A3A3E : 0xFFC9C9D1, boldFace, Paint.Align.LEFT, 0.18f);
+        spacedText(c, "C.O CALCULATOR", x, y + ps(8), ps(10.0f), theme.light ? 0xFF3A3A3E : 0xFFC9C9D1, boldFace, Paint.Align.LEFT, 0.12f);
         spacedText(c, "SCIENTIFIC INSTRUMENT  SC-100", x, y + ps(20), ps(5.6f), theme.muted, medium, Paint.Align.LEFT, 0.06f);
         spacedText(c, "32-DIGIT ENGINE", x + w, y + ps(12), ps(5f), theme.footer, medium, Paint.Align.RIGHT, 0.05f);
     }
 
     private void drawFooter(Canvas c) {
-        text(c, "COKALKU · PRECISION INSTRUMENTS", px(18), py(883), ps(5.2f), theme.footer, medium, Paint.Align.LEFT);
+        text(c, "C.O CALCULATOR · PRECISION INSTRUMENTS", px(18), py(883), ps(5.0f), theme.footer, medium, Paint.Align.LEFT);
         text(c, "SC–100  ·  12 DIGIT", px(394), py(883), ps(5.2f), theme.footer, medium, Paint.Align.RIGHT);
         Paint p = paint;
         p.setStyle(Paint.Style.FILL);
@@ -1857,14 +1857,14 @@ public class CalculatorView extends View {
 
     private void drawSettings(Canvas c) {
         setupPanel(c, "SETTINGS", "INSTRUMENT PREFERENCES", 0.86f, 0.86f);
-        String[] labels = {"Theme", "Angle mode", "Number format", "Tanda desimal", "Digits", "Grouping",
-                "Getar", "Kekuatan getar", "Key sound", "Click volume", "Keep awake",
-                "Reset instrument", "About COKALKU"};
+        String[] labels = {"Theme", "Angle mode", "Number format", "Decimal mark", "Digits", "Grouping",
+                "Vibration", "Vibration strength", "Key sound", "Click volume", "Keep awake",
+                "Reset instrument", "About C.O CALCULATOR"};
         String[] values = {
                 Theme.byIndex(prefs.theme()).name,
                 prefs.angle() == 0 ? "DEGREES" : prefs.angle() == 1 ? "RADIANS" : "GRADS",
                 prefs.format() == 0 ? "AUTO" : prefs.format() == 1 ? "FIX" : prefs.format() == 2 ? "SCI" : "ENG",
-                prefs.decimalComma() ? "KOMA" : "TITIK",
+                prefs.decimalComma() ? "COMMA" : "DOT",
                 String.valueOf(prefs.decimals()),
                 prefs.grouping() ? "ON" : "OFF",
                 prefs.haptics() ? "ON" : "OFF",
@@ -1873,7 +1873,7 @@ public class CalculatorView extends View {
                 prefs.clickVolume() + "%",
                 prefs.keepAwake() ? "ON" : "OFF",
                 "TOUCH TO RESET",
-                "SC-100 · 1.4"
+                "SC-100 · 1.5"
         };
         float top = panel.top + ps(74);
         float footer = panel.bottom - ps(14);
@@ -1905,7 +1905,7 @@ public class CalculatorView extends View {
             case 2: prefs.setFormat((prefs.format() + 1) % 4); break;
             case 3:
                 prefs.setDecimalComma(!prefs.decimalComma());
-                toast(prefs.decimalComma() ? "Desimal: koma (0,5)" : "Desimal: titik (0.5)");
+                toast(prefs.decimalComma() ? "Decimal: comma (0,5)" : "Decimal: dot (0.5)");
                 break;
             case 4: prefs.setDecimals(nextDecimals()); break;
             case 5: prefs.setGrouping(!prefs.grouping()); break;
@@ -1914,13 +1914,13 @@ public class CalculatorView extends View {
                 prefs.setHaptics(on);
                 if (on) {
                     if (vibrator == null || !vibrator.hasVibrator()) {
-                        toast("Motor getar tidak terdeteksi di HP ini");
+                        toast("No vibration motor detected on this device");
                     } else {
                         vibrate(300);
-                        toast("Getar aktif — tes 300 ms");
+                        toast("Vibration on — 300 ms test");
                     }
                 } else {
-                    toast("Getar dimatikan");
+                    toast("Vibration off");
                 }
                 break;
             }
@@ -1928,21 +1928,21 @@ public class CalculatorView extends View {
                 int v = nextHapticIntensity();
                 prefs.setHapticIntensity(v);
                 if (prefs.haptics()) vibrate(220);
-                toast("Kekuatan getar: " + v + "%");
+                toast("Vibration strength: " + v + "%");
                 break;
             }
             case 8: {
                 boolean on = !prefs.sound();
                 prefs.setSound(on);
                 if (on) playClick();
-                toast(on ? "Suara tombol aktif" : "Suara tombol dimatikan");
+                toast(on ? "Key sound on" : "Key sound off");
                 break;
             }
             case 9: {
                 int v = nextClickVolume();
                 prefs.setClickVolume(v);
                 if (prefs.sound()) playClick();
-                toast("Volume klik: " + v + "%");
+                toast("Click volume: " + v + "%");
                 break;
             }
             case 10: prefs.setKeepAwake(!prefs.keepAwake()); setKeepScreenOn(prefs.keepAwake()); break;
@@ -1961,7 +1961,7 @@ public class CalculatorView extends View {
                 buildChrome();
                 break;
             case 12:
-                toast("COKALKU SC-100 · a precision scientific calculator");
+                toast("C.O CALCULATOR SC-100 · a precision scientific calculator");
                 break;
             default: break;
         }
@@ -2044,6 +2044,8 @@ public class CalculatorView extends View {
         }
     }
 }
+
+
 
 
 

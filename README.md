@@ -1,4 +1,4 @@
-# COKALKU SC-100
+# C.O CALCULATOR SC-100
 
 A new Android scientific calculator with the tactile, physical-instrument feel of a classic
 pocket calculator. The product and interface are original; the feature set and the level of
@@ -6,7 +6,7 @@ realism were informed by RealCalc Scientific Calculator 3.1.1.
 
 **No RealCalc code, artwork, fonts, or branding is used in this app.**
 
-![COKALKU SC-100 — main screen](design/app/01-calculator.png)
+![C.O CALCULATOR SC-100 — main screen](design/app/01-calculator.png)
 
 ## Running on a 1080 × 2400 device
 
@@ -31,13 +31,14 @@ Diuji pada 480 × 800, 1080 × 1920, 1080 × 2400, 1600 × 2560 (tablet), 800 ×
 | Path | What it is |
 |---|---|
 | [`app/`](app) | The complete Android application, Java + custom Canvas drawing |
-| [`COKALKU.apk`](COKALKU.apk) | APK final, signed dan siap dipasang |
+| [`C.O-CALCULATOR.apk`](C.O-CALCULATOR.apk) | APK final, signed dan siap dipasang |
 | [`design/cokalku-sc100.figcraft`](design/cokalku-sc100.figcraft) | Editable FigCraft design file (four screens) |
 | [`design/export/`](design/export) | Exported 2× design screens |
 | [`design/cokalku-icon.figcraft`](design/cokalku-icon.figcraft) | FigCraft app-icon source |
 | [`app/build.ps1`](app/build.ps1) | Reproducible build without Gradle |
 | [`docs/DESIGN.md`](docs/DESIGN.md) | Design system, dimensions and visual decisions |
 | [`docs/PANDUAN.md`](docs/PANDUAN.md) | Panduan lengkap semua fitur dan contoh perhitungan |
+| [`docs/CONTOH-PENGGUNAAN.md`](docs/CONTOH-PENGGUNAAN.md) | Contoh perhitungan untuk setiap fitur |
 | [`docs/RESPONSIVE.md`](docs/RESPONSIVE.md) | Matriks pengujian berbagai ukuran layar |
 
 ## The four designed screens
@@ -52,7 +53,8 @@ Diuji pada 480 × 800, 1080 × 1920, 1080 × 2400, 1600 × 2560 (tablet), 800 ×
 ## Panduan penggunaan
 
 Panduan lengkap semua tombol, fitur, dan contoh perhitungan ada di
-[`docs/PANDUAN.md`](docs/PANDUAN.md). Ringkasnya:
+[`docs/PANDUAN.md`](docs/PANDUAN.md). Contoh untuk setiap fitur ada di
+[`docs/CONTOH-PENGGUNAAN.md`](docs/CONTOH-PENGGUNAAN.md). Ringkasnya:
 
 - `SHIFT` + tombol = fungsi kuning (atau tahan tombol).
 - `SHIFT` + `1` = konverter, `SHIFT` + `2` = konstanta, `SHIFT` + `3` = `mod`.
@@ -107,12 +109,12 @@ The script runs:
 4. `zipalign`
 5. `apksigner` with a local debug keystore
 
-Output: `app/build/COKALKU.apk`; salinannya tersedia di `COKALKU.apk` pada root proyek.
+Output: `app/build/C.O-CALCULATOR.apk`; salinannya tersedia di `C.O-CALCULATOR.apk` pada root proyek.
 
 Install on a connected device:
 
 ```powershell
-adb install -r app\build\COKALKU.apk
+adb install -r app\build\C.O-CALCULATOR.apk
 ```
 
 ## Design
@@ -156,6 +158,8 @@ Feature and interaction inspiration: [RealCalc Scientific Calculator on Google P
 and the APK supplied in this workspace for study. The seven-segment typeface is
 [DSEG7 Classic](https://github.com/keshikan/DSEG) (SIL Open Font License); its license is
 included at `app/assets/fonts/DSEG-OFL.txt`; the runtime copy is `app/res/raw/dseg.ttf`.
+
+
 
 
 

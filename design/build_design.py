@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the COKALKU SC-100 design in FigCraft, in staged headless runs."""
+"""Build the C.O CALCULATOR SC-100 design in FigCraft, in staged headless runs."""
 import json, os, re, subprocess, sys
 
 ROOT = r"C:\CO\pemrograman\real calc"
@@ -159,7 +159,7 @@ def key(x, y, w, h, label, kind="num", size=28, legend=None, legend_x=None,
              valign="top", parent=parent, name="label " + label, auto=True)
 
 def brand(parent):
-    text(44, 21, 160, 10, "COKALKU", size=12, color="#C9C9D1", style="Bold",
+    text(44, 21, 160, 10, "C.O CALCULATOR", size=12, color="#C9C9D1", style="Bold",
          ls=4.2, parent=parent, name="brand")
     text(44, 33, 190, 8, "SCIENTIFIC INSTRUMENT  SC-100", size=5.6,
          color="#85858E", style="Medium", ls=1.35, parent=parent, name="model")
@@ -300,7 +300,7 @@ def calculator_keys(parent):
                 legend=leg if leg else None, style=style, label_color=lc)
 
     # footer
-    text(18, 875, 210, 8, "COKALKU · PRECISION INSTRUMENTS", size=5.2,
+    text(18, 875, 210, 8, "C.O CALCULATOR · PRECISION INSTRUMENTS", size=5.2,
          color="#85858E", style="Medium", ls=0.8, parent=parent, name="footer left")
     text(290, 875, 104, 8, "SC–100  ·  12 DIGIT", size=5.2,
          color="#85858E", style="Medium", align="right", ls=0.8,
@@ -477,7 +477,7 @@ def landscape_screen(parent):
          effects=[noise(0.06, 1.0, "#FFFFFF12")])
     for cx, cy in [(24, 24), (w - 24, 24), (24, h - 24), (w - 24, h - 24)]:
         screw(cx, cy, parent, 3.6)
-    text(44, 18, 140, 10, "COKALKU", size=11, color="#C9C9D1", style="Bold",
+    text(44, 18, 140, 10, "C.O CALCULATOR", size=11, color="#C9C9D1", style="Bold",
          ls=3.6, parent=parent, name="brand")
     text(44, 29, 180, 7, "SC-100 · LANDSCAPE CONSOLE", size=4.8,
          color="#85858E", style="Medium", ls=1.2, parent=parent, name="model")
@@ -564,7 +564,7 @@ def run_script(name, script, out=FILE, input_file=None):
 def main():
     # Stage 1: frames
     script = [
-        {"command": "file.new", "params": {"name": "COKALKU SC-100"}},
+        {"command": "file.new", "params": {"name": "C.O CALCULATOR SC-100"}},
         {"command": "page.setBackground", "params": {"color": "#17181A"}},
     ]
     frames = [
@@ -612,6 +612,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 

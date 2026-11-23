@@ -71,11 +71,12 @@ if (!(Test-Path $ks)) {
         -dname 'CN=COKALKU, OU=Dev, O=COKALKU, L=Jakarta, C=ID'
     if ($LASTEXITCODE -ne 0) { throw 'keytool failed' }
 }
-$out = Join-Path $build 'COKALKU.apk'
+$out = Join-Path $build 'C.O-CALCULATOR.apk'
 & $apksigner sign --ks $ks --ks-pass pass:android --key-pass pass:android --out $out (Join-Path $build 'aligned.apk')
 if ($LASTEXITCODE -ne 0) { throw 'apksigner failed' }
 & $apksigner verify --print-certs $out
 Write-Host "Built $out"
+
 
 
 
