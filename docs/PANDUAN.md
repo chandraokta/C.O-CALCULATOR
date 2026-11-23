@@ -18,7 +18,7 @@ lalu tombolnya, atau **tahan** tombol tersebut sekitar setengah detik.
 
 | Bagian | Keterangan |
 |---|---|
-| **LCD hijau** | Menampilkan ekspresi di baris atas dan angka yang sedang diketik di baris utama. Hasil ekspresi muncul setelah `=`; fungsi satu nilai seperti `sin` dan `√` langsung menghitung angka yang tampil. |
+| **LCD hijau** | Menampilkan ekspresi di baris atas dan hasil di baris utama setelah `=` ditekan. Baris ekspresi kini berukuran dua kali lebih besar agar mudah dibaca. |
 | **Baris utilitas** | `MENU` pengaturan, `DRG▸` ganti sudut, `TAB` jumlah digit, `RCL` buka memori, `STO` simpan memori, `M−` kurangi memori. |
 | **Blok fungsi** | `SHIFT`, `DRG`, `FSE`, `MR`, `MS`, `M+`; `hyp`, `sin`, `cos`, `tan`, `ln`, `log`; `yˣ`, `√`, `x²`, `%`, `(`, `)`. |
 | **Blok angka** | `7 8 9 DEL AC`, `4 5 6 × ÷`, `1 2 3 + −`, `0 ± . EXP =`. |
@@ -34,24 +34,18 @@ pengaturan.
 ### Kapan hasil muncul?
 
 Saat mengetik, LCD utama menampilkan angka yang sedang dimasukkan. Tekan `=` untuk
-menghitung ekspresi dengan operator. Contoh:
+menghitung. Untuk fungsi, tekan fungsinya dulu, lalu masukkan angka:
 
-- `2 + 3` → LCD menampilkan `3`; setelah `=` → **5**.
+- `sin` `30` `=` → **0.5**
+- `√` `144` `=` → **12**
+- `12` `x²` `=` → **144**
+- `10` `SHIFT` `7` `=` → **3,628,800**
 
-Fungsi satu nilai (sin, cos, tan, ln, log, akar, faktorial, dan sejenisnya) langsung
-menghitung angka yang sedang tampil. Masukkan angka dulu, baru tekan fungsinya:
+Aplikasi otomatis menutup kurung fungsi saat `=` ditekan, jadi `sin` `30` `=` sama dengan
+`sin(30)`. Urutan ini juga berlaku untuk `cos`, `tan`, `ln`, `log`, `√`, `∛`, dan fungsi
+lainnya.
 
-- `30` lalu `sin` → **0.5** (langsung, tanpa `=`)
-- `144` lalu `√` → **12**
-- `12` lalu `x²` → **144**
-- `10` lalu `SHIFT` + `7` → **3,628,800**
-
-Urutan lama — `sin` dulu, lalu `30`, lalu `=` — tetap didukung sebagai cadangan, tetapi
-urutan angka-dulu adalah cara utama yang disarankan.
-
-Untuk ekspresi bercampur, hasil fungsi ditampilkan lebih dulu sebagai nilai sementara;
-tekan `=` untuk menyelesaikan seluruh ekspresi. Contoh `2 + 30` lalu `sin` menampilkan
-**0.5** dengan ekspresi `2+sin(30)`; tekan `=` → **2.5**.
+Untuk ekspresi bercampur, gunakan `=` setelah fungsi: `2 + 3 + 5 + sin 30 =` → **10.5**.
 
 ### Angka dan operator
 
@@ -136,17 +130,16 @@ Contoh:
 - **RAD** — radian
 - **GRAD** — gradian
 
-Contoh (angka dulu, lalu fungsi):
+Contoh (fungsi dulu, lalu angka):
 
-- DEG: `30` `sin` → **0.5**
-- DEG: `60` `cos` → **0.5**
-- DEG: `45` `tan` → **1**
-- RAD: `π` `÷` `2` `=` lalu `sin` → **1**
-- DEG: `0.5` `SHIFT` `sin` → **30** (arcsin)
-- GRAD: pilih **GRAD**, lalu `100` `sin` → **1**
+- DEG: `sin` `30` `=` → **0.5**
+- DEG: `cos` `60` `=` → **0.5**
+- DEG: `tan` `45` `=` → **1**
+- RAD: `sin` `π` `÷` `2` `=` → **1**
+- DEG: `SHIFT` `sin` `0.5` `=` → **30** (arcsin)
+- GRAD: pilih **GRAD**, lalu `sin` `100` `=` → **1**
 
-Urutan fungsi-dulu juga masih bisa: `sin` `30` `=` → **0.5**, karena aplikasi menutup
-kurung otomatis saat `=` ditekan.
+Kurung tutup tidak perlu diketik; aplikasi menutupnya otomatis saat `=`.
 
 ---
 
@@ -155,16 +148,16 @@ kurung otomatis saat `=` ditekan.
 | Perhitungan | Urutan tombol | Hasil |
 |---|---|---|
 | 2 pangkat 10 | `2` `yˣ` `10` `=` | 1024 |
-| Akar 144 | `144` `√` | 12 (langsung) |
-| Akar kubik 27 | `27` `SHIFT` `√` | 3 (langsung) |
-| 12 kuadrat | `12` `x²` | 144 (langsung) |
-| 5 kubik | `5` `SHIFT` `x²` | 125 (langsung) |
-| 4 faktorial | `4` `SHIFT` `7` | 24 (langsung) |
-| 10 faktorial | `10` `SHIFT` `7` | 3,628,800 |
+| Akar 144 | `√` `144` `=` | 12 |
+| Akar kubik 27 | `SHIFT` `√` `27` `=` | 3 |
+| 12 kuadrat | `12` `x²` `=` | 144 |
+| 5 kubik | `5` `SHIFT` `x²` `=` | 125 |
+| 4 faktorial | `4` `SHIFT` `7` `=` | 24 |
+| 10 faktorial | `10` `SHIFT` `7` `=` | 3,628,800 |
 | 5 kombinasi 3 | `5` `SHIFT` `8` `3` `=` | 10 |
 | 5 permutasi 3 | `5` `SHIFT` `9` `3` `=` | 60 |
 | 17 mod 5 | `17` `SHIFT` `3` `5` `=` | 2 |
-| 1/4 | `4` `SHIFT` `%` | 0.25 (langsung) |
+| 1/4 | `4` `SHIFT` `%` `=` | 0.25 |
 
 Catatan: `n!`, `nCr`, dan `nPr` membutuhkan bilangan bulat. `mod` juga menerima desimal;
 hasilnya mengikuti tanda pembagi, contoh `−8 mod 5 = 2` dan `8 mod −5 = −2`.
@@ -175,10 +168,10 @@ hasilnya mengikuti tanda pembagi, contoh `−8 mod 5 = 2` dan `8 mod −5 = −2
 
 | Perhitungan | Urutan tombol | Hasil |
 |---|---|---|
-| ln(e) | `e` `ln` | 1 (langsung) |
-| log(1000) | `1000` `log` | 3 (langsung) |
-| e² | `2` `SHIFT` `ln` | 7.38905609893 |
-| 10² | `2` `SHIFT` `log` | 100 |
+| ln(e) | `ln` `SHIFT` `5` `=` | 1 |
+| log(1000) | `log` `1000` `=` | 3 |
+| e² | `SHIFT` `ln` `2` `=` | 7.38905609893 |
+| 10² | `SHIFT` `log` `2` `=` | 100 |
 | 2π | `2` `SHIFT` `4` `=` | 6.28318530718 |
 | φ (rasio emas) | masukkan lewat `CNST` → MATHEMATICS | 1.61803398875 |
 
@@ -311,10 +304,12 @@ Buka dengan tombol `MENU` di baris utilitas (portrait) atau `SET` (landscape).
 | **Number format** | AUTO, FIX, SCI, ENG |
 | **Digits** | 2, 3, 4, 5, 6, 8, 10 |
 | **Grouping** | ON/OFF |
-| **Haptics** | ON/OFF |
-| **Key sound** | ON/OFF |
+| **Haptics** | ON/OFF — default ON |
+| **Haptic strength** | 20%, 40%, 60%, 80%, 100% — default 60% |
+| **Key sound** | ON/OFF — default ON |
+| **Click volume** | 10%, 30%, 50%, 70%, 100% — default 30% |
 | **Keep awake** | ON/OFF |
-| **Reset instrument** | mengembalikan tema, sudut, format, digit, grouping, haptics, suara, dan data memori/riwayat ke awal |
+| **Reset instrument** | mengembalikan tema, sudut, format, digit, grouping, haptics, intensitas, suara, volume, dan data memori/riwayat ke awal |
 | **About COKALKU** | info versi |
 
 Perubahan langsung diterapkan dan disimpan. Tema juga mengubah warna body, tombol, dan LCD.
@@ -356,11 +351,11 @@ media; suara tombol diputar melalui SoundPool dan tidak bergantung pada pengatur
 
 Hitung `sin(30) + √144 × 2`:
 
-1. `30` lalu `sin` → **0.5** (langsung).
-2. `+` → melanjutkan dengan 0.5.
-3. `144` lalu `√` → **12** (langsung, ekspresi menjadi `Ans+√(144)`).
-4. `×` `2` → `Ans+√(144)×2`.
-5. `=` → **24.5** (0.5 + 12 × 2).
+1. `sin` `30` `)` → ekspresi `sin(30)`.
+2. `+` → `+`.
+3. `√` `144` `)` → `√(144)`.
+4. `×` `2` → `× 2`.
+5. `=` → **24.5** (sin 30 = 0.5; √144 = 12; 0.5 + 12 × 2 = 24.5).
 6. Buka riwayat `SHIFT` + `=` untuk melihat hasil.
 
 Contoh lain yang sudah diuji:
@@ -389,6 +384,7 @@ Contoh lain yang sudah diuji:
 - [Desain FigCraft](../design/cokalku-sc100.figcraft)
 - [Screenshot aplikasi](../design/app)
 - [Build script](../app/build.ps1)
+
 
 
 

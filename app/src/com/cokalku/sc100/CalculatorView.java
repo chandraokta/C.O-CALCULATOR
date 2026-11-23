@@ -17,6 +17,7 @@ import android.media.SoundPool;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.os.VibratorManager;
@@ -75,6 +76,8 @@ public class CalculatorView extends View {
     private final RectF lcdModule = new RectF();
     private final RectF lcdScreen = new RectF();
     private Key pressed;
+    private Key flashKey;
+    private long flashStart;
     private boolean longFired;
     private Runnable longPressRunnable;
     private float downX, downY;
@@ -635,13 +638,26 @@ public class CalculatorView extends View {
         if (chrome != null) canvas.drawBitmap(chrome, 0, 0, null);
         drawDisplay(canvas);
         if (pressed != null) {
-            float x = px(pressed.x), y = py(pressed.y), w = px(pressed.w), h = py(pressed.h);
-            Paint p = paint;
-            p.setStyle(Paint.Style.FILL);
-            p.setColor(0x18FFFFFF);
-            canvas.drawRoundRect(new RectF(x + ps(2), y + ps(2), x + w - ps(2), y + h), ps(9), ps(9), p);
+            drawPress(canvas, pressed, 0x66000000);
+        } else if (flashKey != null) {
+            long elapsed = SystemClock.uptimeMillis() - flashStart;
+            if (elapsed >= 140) {
+                flashKey = null;
+            } else {
+                int alpha = (int) (0x66 * (1f - elapsed / 140f));
+                drawPress(canvas, flashKey, alpha << 24);
+                postInvalidateDelayed(16);
+            }
         }
         if (mode != Mode.CALC) drawOverlay(canvas);
+    }
+
+    private void drawPress(Canvas c, Key k, int color) {
+        float x = px(k.x), y = py(k.y), w = px(k.w), h = py(k.h);
+        Paint p = paint;
+        p.setStyle(Paint.Style.FILL);
+        p.setColor(color);
+        c.drawRoundRect(new RectF(x + ps(2), y + ps(2), x + w - ps(2), y + h), ps(9), ps(9), p);
     }
 
     private void drawDisplay(Canvas canvas) {
@@ -659,8 +675,9 @@ public class CalculatorView extends View {
 
         String expression = justEvaluated ? lastExpr + "  =" : expr;
         if (expression == null || expression.isEmpty()) expression = "READY";
-        text(canvas, ellipsizeLeft(expression, right - left - 2 * pad, ps(7.8f)), left + pad,
-                top + ps(20) + ps(7.8f), ps(7.8f), theme.lcdDim, medium, Paint.Align.LEFT);
+        float exprSize = ps(landscape ? 10.5f : 15.6f);
+        text(canvas, ellipsizeLeft(expression, right - left - 2 * pad, exprSize), left + pad,
+                top + ps(20) + exprSize, exprSize, theme.lcdDim, medium, Paint.Align.LEFT);
 
         if (shift) text(canvas, "2nd", left + ps(36), bottom - ps(8), ps(7), 0xFF4A5F4B, medium, Paint.Align.LEFT);
         if (hyp) text(canvas, "HYP", left + ps(58), bottom - ps(8), ps(7), 0xFF4A5F4B, medium, Paint.Align.LEFT);
@@ -1013,17 +1030,17 @@ public class CalculatorView extends View {
             case "lparen": insert("("); break;
             case "rparen": insert(")"); break;
             case "percent": insert("%"); break;
-            case "fact": if (!applyPostfix("!")) insert("!"); break;
+            case "fact": insert("!"); break;
             case "eq": equals(); break;
             case "del": backspace(); break;
             case "ac": clearAll(); break;
             case "sign": toggleSign(); break;
             case "exp": insert("e"); break;
-            case "sqrt": if (!applyUnary("√")) insertFunction("√"); break;
-            case "cbrt": if (!applyUnary("∛")) insertFunction("∛"); break;
-            case "sq": if (!applyPostfix("^2")) insert("^2"); break;
-            case "cube": if (!applyPostfix("^3")) insert("^3"); break;
-            case "inv": if (!applyUnary("1/")) { if (expr.isEmpty()) expr = "1/("; else expr = "1/(" + expr + ")"; justEvaluated = false; invalidate(); } break;
+            case "sqrt": insertFunction("√"); break;
+            case "cbrt": insertFunction("∛"); break;
+            case "sq": insert("^2"); break;
+            case "cube": insert("^3"); break;
+            case "inv": if (expr.isEmpty()) expr = "1/("; else expr = "1/(" + expr + ")"; justEvaluated = false; invalidate(); break;
             case "sin": trig("sin", false); break;
             case "cos": trig("cos", false); break;
             case "tan": trig("tan", false); break;
@@ -1031,10 +1048,10 @@ public class CalculatorView extends View {
             case "acos": trig("cos", true); break;
             case "atan": trig("tan", true); break;
             case "hyp": hyp = !hyp; invalidate(); break;
-            case "ln": if (!applyUnary("ln")) insertFunction("ln"); break;
-            case "log": if (!applyUnary("log")) insertFunction("log"); break;
-            case "expf": if (!applyUnary("exp")) insertFunction("exp"); break;
-            case "pow10": if (!applyUnary("10^")) insertFunction("10^"); break;
+            case "ln": insertFunction("ln"); break;
+            case "log": insertFunction("log"); break;
+            case "expf": insertFunction("exp"); break;
+            case "pow10": insertFunction("10^"); break;
             case "shift": shift = !shift; if (!shift) hyp = false; invalidate(); break;
             case "drg": prefs.setAngle((prefs.angle() + 1) % 3); invalidate(); break;
             case "fse": prefs.setFormat((prefs.format() + 1) % 4); invalidate(); break;
@@ -1224,7 +1241,7 @@ public class CalculatorView extends View {
 
     private void trig(String base, boolean inverse) {
         String name = (inverse ? "a" : "") + base + (hyp ? "h" : "");
-        if (!applyUnary(name)) insertFunction(name);
+        insertFunction(name);
         hyp = false;
     }
 
@@ -1236,6 +1253,8 @@ public class CalculatorView extends View {
                 Key k = keyAt(e.getX(), e.getY());
                 if (k == null) return true;
                 pressed = k;
+                flashKey = k;
+                flashStart = SystemClock.uptimeMillis();
                 longFired = false;
                 feedback(false);
                 downX = e.getX(); downY = e.getY();
@@ -1264,6 +1283,8 @@ public class CalculatorView extends View {
                 handler.removeCallbacks(longPressRunnable);
                 Key k = pressed;
                 pressed = null;
+                flashKey = k;
+                flashStart = SystemClock.uptimeMillis();
                 if (k != null && keyAt(e.getX(), e.getY()) == k) {
                     boolean useAlt = shift || longFired;
                     if (k.action.equals("shift")) perform(k, false);
@@ -1302,7 +1323,8 @@ public class CalculatorView extends View {
 
     private void playClick() {
         if (soundPool != null && clickSound != 0 && clickReady) {
-            if (soundPool.play(clickSound, 0.8f, 0.8f, 1, 0, 1.0f) == 0) fallbackClick();
+            float vol = Math.max(0.05f, Math.min(1f, prefs.clickVolume() / 100f));
+            if (soundPool.play(clickSound, vol, vol, 1, 0, 1.0f) == 0) fallbackClick();
         } else {
             fallbackClick();
         }
@@ -1319,7 +1341,8 @@ public class CalculatorView extends View {
         if (vibrator == null || !vibrator.hasVibrator()) return;
         try {
             if (Build.VERSION.SDK_INT >= 26) {
-                vibrator.vibrate(VibrationEffect.createOneShot(ms, 200));
+                int amp = Math.max(1, Math.min(255, prefs.hapticIntensity() * 255 / 100));
+                vibrator.vibrate(VibrationEffect.createOneShot(ms, amp));
             } else {
                 vibrator.vibrate(ms);
             }
@@ -1807,9 +1830,10 @@ public class CalculatorView extends View {
     }
 
     private void drawSettings(Canvas c) {
-        setupPanel(c, "SETTINGS", "INSTRUMENT PREFERENCES", 0.86f, 0.80f);
+        setupPanel(c, "SETTINGS", "INSTRUMENT PREFERENCES", 0.86f, 0.84f);
         String[] labels = {"Theme", "Angle mode", "Number format", "Digits", "Grouping",
-                "Haptics", "Key sound", "Keep awake", "Reset instrument", "About COKALKU"};
+                "Haptics", "Haptic strength", "Key sound", "Click volume", "Keep awake",
+                "Reset instrument", "About COKALKU"};
         String[] values = {
                 Theme.byIndex(prefs.theme()).name,
                 prefs.angle() == 0 ? "DEGREES" : prefs.angle() == 1 ? "RADIANS" : "GRADS",
@@ -1817,10 +1841,12 @@ public class CalculatorView extends View {
                 String.valueOf(prefs.decimals()),
                 prefs.grouping() ? "ON" : "OFF",
                 prefs.haptics() ? "ON" : "OFF",
+                prefs.hapticIntensity() + "%",
                 prefs.sound() ? "ON" : "OFF",
+                prefs.clickVolume() + "%",
                 prefs.keepAwake() ? "ON" : "OFF",
                 "TOUCH TO RESET",
-                "SC-100 · 1.2"
+                "SC-100 · 1.3"
         };
         float top = panel.top + ps(74);
         float footer = panel.bottom - ps(14);
@@ -1830,7 +1856,7 @@ public class CalculatorView extends View {
             if (i % 2 == 0) card(c, new RectF(panel.left + ps(8), y, panel.right - ps(8), y + rowH - ps(2)), 0x06FFFFFF, 0, ps(5), false);
             text(c, labels[i], panel.left + ps(18), y + rowH * 0.60f, ps(11.0f), 0xFFDCDCE3, medium, Paint.Align.LEFT);
             text(c, values[i], panel.right - ps(20), y + rowH * 0.60f, ps(9.5f),
-                    i == 8 ? 0xFFE7A0A0 : 0xFFA99BFF, boldFace, Paint.Align.RIGHT);
+                    i == 10 ? 0xFFE7A0A0 : 0xFFA99BFF, boldFace, Paint.Align.RIGHT);
             c.drawLine(panel.left + ps(18), y + rowH - ps(1), panel.right - ps(18), y + rowH - ps(1), linePaint(0x14FFFFFF, 0.6f));
         }
     }
@@ -1838,7 +1864,7 @@ public class CalculatorView extends View {
     private boolean settingsTouch(float x, float y) {
         float top = panel.top + ps(74);
         float footer = panel.bottom - ps(14);
-        int n = 10;
+        int n = 12;
         float rowH = (footer - top) / n;
         int idx = (int) ((y - top) / rowH);
         if (idx < 0 || idx >= n) return true;
@@ -1860,32 +1886,65 @@ public class CalculatorView extends View {
                 break;
             }
             case 6: {
+                int v = nextHapticIntensity();
+                prefs.setHapticIntensity(v);
+                if (prefs.haptics()) vibrate(180);
+                toast("Intensitas getar: " + v + "%");
+                break;
+            }
+            case 7: {
                 boolean on = !prefs.sound();
                 prefs.setSound(on);
                 if (on) playClick();
                 toast(on ? "Suara tombol aktif" : "Suara tombol dimatikan");
                 break;
             }
-            case 7: prefs.setKeepAwake(!prefs.keepAwake()); setKeepScreenOn(prefs.keepAwake()); break;
-            case 8:
+            case 8: {
+                int v = nextClickVolume();
+                prefs.setClickVolume(v);
+                if (prefs.sound()) playClick();
+                toast("Volume klik: " + v + "%");
+                break;
+            }
+            case 9: prefs.setKeepAwake(!prefs.keepAwake()); setKeepScreenOn(prefs.keepAwake()); break;
+            case 10:
                 clearAll();
                 memories = new double[10];
                 prefs.clearMemories();
                 history.clear();
                 prefs.clearHistory();
                 prefs.setAngle(0); prefs.setFormat(0); prefs.setDecimals(4);
-                prefs.setGrouping(true); prefs.setHaptics(true); prefs.setSound(true);
+                prefs.setGrouping(true); prefs.setHaptics(true); prefs.setHapticIntensity(60);
+                prefs.setSound(true); prefs.setClickVolume(30);
                 prefs.setKeepAwake(true); prefs.setTheme(0);
                 theme = Theme.byIndex(0);
                 buildChrome();
                 break;
-            case 9:
+            case 11:
                 toast("COKALKU SC-100 · a precision scientific calculator");
                 break;
             default: break;
         }
         invalidate();
         return true;
+    }
+
+    private int nextHapticIntensity() {
+        int v = prefs.hapticIntensity();
+        if (v >= 100) return 20;
+        if (v >= 80) return 100;
+        if (v >= 60) return 80;
+        if (v >= 40) return 60;
+        return 40;
+    }
+
+    private int nextClickVolume() {
+        int v = prefs.clickVolume();
+        if (v >= 100) return 10;
+        if (v >= 70) return 100;
+        if (v >= 50) return 70;
+        if (v >= 30) return 50;
+        return 30;
     }
 
     private void drawRadix(Canvas c) {
@@ -1945,6 +2004,13 @@ public class CalculatorView extends View {
         }
     }
 }
+
+
+
+
+
+
+
 
 
 

@@ -64,8 +64,8 @@ Panduan lengkap semua tombol, fitur, dan contoh perhitungan ada di
   multiplication (`2π`, `2(3+4)`).
 - **Scientific functions:** sin, cos, tan, inverse and hyperbolic variants, `ln`, `log`,
   `eˣ`, `10ˣ`, powers, square/cube roots, reciprocal, factorial, `nCr`, `nPr`, `mod`.
-- **Pocket-calculator entry:** enter the number first, then the function — `30` then `sin`
-  gives `0.5` immediately. Expression results still appear when `=` is pressed.
+- **Function-first entry:** press `sin`, then `30`, then `=` — the app closes the
+  parenthesis for you. The expression line above the result is twice as large as before.
 - **Angle modes:** degrees, radians and grads.
 - **12-digit LCD** with a real seven-segment typeface, superscript exponents and status
   indicators (DEG/RAD/GRAD, 2nd, HYP, M, 12 DIGIT).
@@ -77,7 +77,9 @@ Panduan lengkap semua tombol, fitur, dan contoh perhitungan ada di
 - **Constants:** mathematical and physical constants, tap to insert.
 - **Radix view:** the current value in decimal, hexadecimal, octal and binary.
 - **Three finishes:** Graphite, Silver and Midnight; setting is persisted.
-- **Haptics and key-click sound**, both optional.
+- **Haptics and key-click sound**, with on/off switches, adjustable haptic strength and
+  click volume (defaults: haptics on, strength 60%, sound on, volume 30%).
+- **Press feedback:** every key flashes darker while pressed and fades back.
 - **Portrait and landscape** layouts, immersive full-screen, keep-awake.
 - **32-digit internal arithmetic** using `BigDecimal` (DECIMAL128) for the four basic
   operations; transcendental functions use double precision and are formatted to 12 digits.
@@ -153,6 +155,7 @@ Feature and interaction inspiration: [RealCalc Scientific Calculator on Google P
 and the APK supplied in this workspace for study. The seven-segment typeface is
 [DSEG7 Classic](https://github.com/keshikan/DSEG) (SIL Open Font License); its license is
 included at `app/assets/fonts/DSEG-OFL.txt`; the runtime copy is `app/res/raw/dseg.ttf`.
+
 
 
 

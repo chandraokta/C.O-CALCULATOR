@@ -43,6 +43,12 @@ public final class Prefs {
     public boolean sound() { return sp.getBoolean("sound", true); }
     public void setSound(boolean v) { sp.edit().putBoolean("sound", v).apply(); }
 
+    public int hapticIntensity() { return sp.getInt("hapticIntensity", 60); }
+    public void setHapticIntensity(int v) { sp.edit().putInt("hapticIntensity", Math.max(10, Math.min(100, v))).apply(); }
+
+    public int clickVolume() { return sp.getInt("clickVolume", 30); }
+    public void setClickVolume(int v) { sp.edit().putInt("clickVolume", Math.max(5, Math.min(100, v))).apply(); }
+
     public boolean keepAwake() { return sp.getBoolean("keepAwake", true); }
     public void setKeepAwake(boolean v) { sp.edit().putBoolean("keepAwake", v).apply(); }
 
@@ -98,6 +104,7 @@ public final class Prefs {
 
     public void clearHistory() { sp.edit().putString("history", "[]").apply(); }
 }
+
 
 
 
