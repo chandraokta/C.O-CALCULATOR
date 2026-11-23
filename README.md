@@ -20,7 +20,7 @@ These captures are from the actual APK on an Android 11 x86_64 emulator (1080 ×
 | ![Result history](design/app/02-history.png) | ![Unit converter](design/app/03-converter.png) |
 | **Result history** opens from `SHIFT` + `=` (the `ANS` legend). Tap any row to reuse it. | **Unit converter** keeps the current value and converts into every listed unit live. |
 | ![Landscape](design/app/04-landscape.png) | ![Settings](design/app/07-settings.png) |
-| **Landscape console:** ten columns, all scientific functions and a `SET` key. | **Settings:** larger labels and values, plus working haptics and key sound. |
+| **Landscape console:** ten columns, all scientific functions and a `SET` key. | **Settings:** larger labels and values, plus working vibration and key sound. |
 
 ![Ukuran layar yang diuji](design/app/06-responsive.png)
 
@@ -77,8 +77,9 @@ Panduan lengkap semua tombol, fitur, dan contoh perhitungan ada di
 - **Constants:** mathematical and physical constants, tap to insert.
 - **Radix view:** the current value in decimal, hexadecimal, octal and binary.
 - **Three finishes:** Graphite, Silver and Midnight; setting is persisted.
-- **Haptics and key-click sound**, with on/off switches, adjustable haptic strength and
-  click volume (defaults: haptics on, strength 60%, sound on, volume 30%).
+- **Vibration (Getar) and key-click sound**, with on/off switches, adjustable vibration
+  strength and click volume (defaults: vibration on, strength 100%, sound on, volume 30%).
+- **Decimal mark:** comma by default (`0,001`), with a dot option (`0.001`).
 - **Press feedback:** every key flashes darker while pressed and fades back.
 - **Portrait and landscape** layouts, immersive full-screen, keep-awake.
 - **32-digit internal arithmetic** using `BigDecimal` (DECIMAL128) for the four basic
@@ -155,6 +156,7 @@ Feature and interaction inspiration: [RealCalc Scientific Calculator on Google P
 and the APK supplied in this workspace for study. The seven-segment typeface is
 [DSEG7 Classic](https://github.com/keshikan/DSEG) (SIL Open Font License); its license is
 included at `app/assets/fonts/DSEG-OFL.txt`; the runtime copy is `app/res/raw/dseg.ttf`.
+
 
 
 

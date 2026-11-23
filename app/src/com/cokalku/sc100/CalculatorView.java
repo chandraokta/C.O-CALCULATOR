@@ -149,7 +149,15 @@ public class CalculatorView extends View {
         setFocusableInTouchMode(true);
         if (Build.VERSION.SDK_INT >= 31) {
             VibratorManager vm = (VibratorManager) c.getSystemService(Context.VIBRATOR_MANAGER_SERVICE);
-            vibrator = vm == null ? null : vm.getDefaultVibrator();
+            if (vm != null) {
+                vibrator = vm.getDefaultVibrator();
+                if (vibrator == null) {
+                    int[] ids = vm.getVibratorIds();
+                    if (ids.length > 0) vibrator = vm.getVibrator(ids[0]);
+                }
+            } else {
+                vibrator = null;
+            }
         } else {
             vibrator = (Vibrator) c.getSystemService(Context.VIBRATOR_SERVICE);
         }
@@ -675,6 +683,7 @@ public class CalculatorView extends View {
 
         String expression = justEvaluated ? lastExpr + "  =" : expr;
         if (expression == null || expression.isEmpty()) expression = "READY";
+        expression = showNumbers(expression);
         float exprSize = ps(landscape ? 10.5f : 15.6f);
         text(canvas, ellipsizeLeft(expression, right - left - 2 * pad, exprSize), left + pad,
                 top + ps(20) + exprSize, exprSize, theme.lcdDim, medium, Paint.Align.LEFT);
@@ -706,7 +715,7 @@ public class CalculatorView extends View {
     }
 
     private void drawMantissa(Canvas c, String s, float right, float baseline, float maxW, float start, float min) {
-        s = s.replace(",", " ");
+        if (!prefs.decimalComma()) s = s.replace(",", " ");
         textPaint.reset();
         textPaint.setAntiAlias(true);
         textPaint.setTypeface(dseg);
@@ -745,7 +754,7 @@ public class CalculatorView extends View {
         if (justEvaluated) return format(lastResult);
         if (expr.isEmpty()) return "0";
         // While typing, show the current entry, never a live result. The result appears on =.
-        return currentEntry();
+        return showNumbers(currentEntry());
     }
 
     /** The numeric token being typed, e.g. "30" in "sin(30" or "3" in "2+3". */
@@ -803,7 +812,13 @@ public class CalculatorView extends View {
         Formatter.Mode m = prefs.format() == 1 ? Formatter.Mode.FIX
                 : prefs.format() == 2 ? Formatter.Mode.SCI
                 : prefs.format() == 3 ? Formatter.Mode.ENG : Formatter.Mode.AUTO;
-        return Formatter.format(v, m, prefs.decimals(), prefs.grouping());
+        return Formatter.format(v, m, prefs.decimals(), prefs.grouping(), prefs.decimalComma());
+    }
+
+    /** Raw expressions are stored with a dot; the LCD shows the chosen decimal mark. */
+    private String showNumbers(String s) {
+        if (s == null) return "";
+        return prefs.decimalComma() ? s.replace('.', ',') : s;
     }
 
     private String ellipsizeLeft(String s, float maxW, float size) {
@@ -1316,7 +1331,7 @@ public class CalculatorView extends View {
                 performHapticFeedback(longPress ? HapticFeedbackConstants.LONG_PRESS : HapticFeedbackConstants.VIRTUAL_KEY,
                         HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             } catch (Exception ignored) {}
-            vibrate(longPress ? 55 : 40);
+            vibrate(longPress ? 90 : 60);
         }
         if (prefs.sound()) playClick();
     }
@@ -1338,15 +1353,26 @@ public class CalculatorView extends View {
     }
 
     private void vibrate(int ms) {
-        if (vibrator == null || !vibrator.hasVibrator()) return;
+        if (vibrator == null || !vibrator.hasVibrator()) {
+            android.util.Log.d("COKALKU", "vibrate skipped: no vibrator");
+            return;
+        }
+        int amp = Math.max(1, Math.min(255, prefs.hapticIntensity() * 255 / 100));
         try {
             if (Build.VERSION.SDK_INT >= 26) {
-                int amp = Math.max(1, Math.min(255, prefs.hapticIntensity() * 255 / 100));
                 vibrator.vibrate(VibrationEffect.createOneShot(ms, amp));
             } else {
                 vibrator.vibrate(ms);
             }
-        } catch (Exception ignored) {}
+            android.util.Log.d("COKALKU", "vibrate " + ms + "ms amp=" + amp);
+        } catch (Exception e) {
+            try {
+                vibrator.vibrate(new long[]{0, ms}, -1);
+                android.util.Log.d("COKALKU", "vibrate fallback " + ms + "ms");
+            } catch (Exception ignored) {
+                android.util.Log.d("COKALKU", "vibrate failed: " + e);
+            }
+        }
     }
 
     // ---------------------------------------------------------------- overlays (stubs, filled below)
@@ -1506,7 +1532,7 @@ public class CalculatorView extends View {
                 card(c, new RectF(panel.left + ps(10), y, panel.right - ps(10), y + rowH - ps(2)), 0x0AFFFFFF, 0, ps(6), false);
             }
             text(c, String.format(java.util.Locale.US, "%02d", idx + 1), panel.left + ps(20), y + rowH * 0.56f, ps(7.6f), 0xFFA99BFF, boldFace, Paint.Align.LEFT);
-            String val = h.value.replace(",", " ");
+            String val = h.value;
             textPaint.reset();
             textPaint.setAntiAlias(true);
             textPaint.setTypeface(dseg);
@@ -1517,7 +1543,7 @@ public class CalculatorView extends View {
                 textPaint.setTextSize(textPaint.getTextSize() - ps(0.8f));
             }
             c.drawText(val, panel.left + ps(44), y + rowH * 0.56f, textPaint);
-            text(c, ellipsizeLeft(h.expression, panel.width() - ps(86), ps(6.0f)), panel.left + ps(44), y + rowH * 0.86f, ps(6.0f), theme.muted, medium, Paint.Align.LEFT);
+            text(c, ellipsizeLeft(showNumbers(h.expression), panel.width() - ps(86), ps(6.0f)), panel.left + ps(44), y + rowH * 0.86f, ps(6.0f), theme.muted, medium, Paint.Align.LEFT);
             text(c, "→", panel.right - ps(22), y + rowH * 0.62f, ps(8), 0xFF6E6E78, sans, Paint.Align.RIGHT);
             c.drawLine(panel.left + ps(18), y + rowH - ps(1), panel.right - ps(18), y + rowH - ps(1), linePaint(0x1AFFFFFF, 0.6f));
         }
@@ -1656,7 +1682,7 @@ public class CalculatorView extends View {
         RectF fromCard = new RectF(panel.left + ps(16), cardsTop, panel.right - ps(16), cardsTop + cardH);
         card(c, fromCard, 0x0EFFFFFF, 0x1AFFFFFF, ps(9), false);
         text(c, "FROM", fromCard.left + ps(12), fromCard.top + ps(18), ps(5.4f), 0xFFA99BFF, boldFace, Paint.Align.LEFT);
-        String fromVal = UnitConverter.formatValue(base);
+        String fromVal = UnitConverter.formatValue(base, prefs.decimalComma());
         text(c, fromVal, fromCard.left + ps(12), fromCard.top + ps(50), ps(20), 0xFFF4F4F8, medium, Paint.Align.LEFT);
         rectCaret(c, fromCard.right - ps(26), fromCard.top + ps(22), ps(2), ps(40));
         text(c, cat.units.get(convFrom).name, fromCard.left + ps(12), fromCard.bottom - ps(10), ps(8.4f), 0xFFD2D2DA, medium, Paint.Align.LEFT);
@@ -1672,7 +1698,7 @@ public class CalculatorView extends View {
         RectF toCard = new RectF(panel.left + ps(16), toTop, panel.right - ps(16), toTop + cardH);
         card(c, toCard, 0x1A2E3E31, 0x88B9D6B0, ps(9), false);
         text(c, "TO", toCard.left + ps(12), toCard.top + ps(18), ps(5.4f), 0xFFB7D5AE, boldFace, Paint.Align.LEFT);
-        text(c, UnitConverter.formatValue(converted), toCard.right - ps(14), toCard.top + ps(50), ps(20), 0xFFDCEBD7, medium, Paint.Align.RIGHT);
+        text(c, UnitConverter.formatValue(converted, prefs.decimalComma()), toCard.right - ps(14), toCard.top + ps(50), ps(20), 0xFFDCEBD7, medium, Paint.Align.RIGHT);
         text(c, cat.units.get(convTo).name, toCard.left + ps(12), toCard.bottom - ps(10), ps(8.4f), 0xFFD2E2CD, medium, Paint.Align.LEFT);
         text(c, cat.units.get(convTo).symbol, toCard.right - ps(14), toCard.bottom - ps(10), ps(8.4f), 0xFF9BB295, sans, Paint.Align.RIGHT);
 
@@ -1695,7 +1721,7 @@ public class CalculatorView extends View {
             text(c, cat.units.get(i).name, r.left + ps(9), r.top + ps(17), ps(6.8f), 0xFFE2E2E8, medium, Paint.Align.LEFT);
             text(c, cat.units.get(i).symbol, r.right - ps(9), r.top + ps(17), ps(6.2f), 0xFFA0A0FF, boldFace, Paint.Align.RIGHT);
             double v = UnitConverter.convert(cat, convFrom, i, base);
-            text(c, UnitConverter.formatValue(v), r.left + ps(9), r.bottom - ps(7), ps(7.0f), 0xFF9D9DA7, sans, Paint.Align.LEFT);
+            text(c, UnitConverter.formatValue(v, prefs.decimalComma()), r.left + ps(9), r.bottom - ps(7), ps(7.0f), 0xFF9D9DA7, sans, Paint.Align.LEFT);
         }
     }
 
@@ -1830,14 +1856,15 @@ public class CalculatorView extends View {
     }
 
     private void drawSettings(Canvas c) {
-        setupPanel(c, "SETTINGS", "INSTRUMENT PREFERENCES", 0.86f, 0.84f);
-        String[] labels = {"Theme", "Angle mode", "Number format", "Digits", "Grouping",
-                "Haptics", "Haptic strength", "Key sound", "Click volume", "Keep awake",
+        setupPanel(c, "SETTINGS", "INSTRUMENT PREFERENCES", 0.86f, 0.86f);
+        String[] labels = {"Theme", "Angle mode", "Number format", "Tanda desimal", "Digits", "Grouping",
+                "Getar", "Kekuatan getar", "Key sound", "Click volume", "Keep awake",
                 "Reset instrument", "About COKALKU"};
         String[] values = {
                 Theme.byIndex(prefs.theme()).name,
                 prefs.angle() == 0 ? "DEGREES" : prefs.angle() == 1 ? "RADIANS" : "GRADS",
                 prefs.format() == 0 ? "AUTO" : prefs.format() == 1 ? "FIX" : prefs.format() == 2 ? "SCI" : "ENG",
+                prefs.decimalComma() ? "KOMA" : "TITIK",
                 String.valueOf(prefs.decimals()),
                 prefs.grouping() ? "ON" : "OFF",
                 prefs.haptics() ? "ON" : "OFF",
@@ -1846,7 +1873,7 @@ public class CalculatorView extends View {
                 prefs.clickVolume() + "%",
                 prefs.keepAwake() ? "ON" : "OFF",
                 "TOUCH TO RESET",
-                "SC-100 · 1.3"
+                "SC-100 · 1.4"
         };
         float top = panel.top + ps(74);
         float footer = panel.bottom - ps(14);
@@ -1856,7 +1883,7 @@ public class CalculatorView extends View {
             if (i % 2 == 0) card(c, new RectF(panel.left + ps(8), y, panel.right - ps(8), y + rowH - ps(2)), 0x06FFFFFF, 0, ps(5), false);
             text(c, labels[i], panel.left + ps(18), y + rowH * 0.60f, ps(11.0f), 0xFFDCDCE3, medium, Paint.Align.LEFT);
             text(c, values[i], panel.right - ps(20), y + rowH * 0.60f, ps(9.5f),
-                    i == 10 ? 0xFFE7A0A0 : 0xFFA99BFF, boldFace, Paint.Align.RIGHT);
+                    i == 11 ? 0xFFE7A0A0 : 0xFFA99BFF, boldFace, Paint.Align.RIGHT);
             c.drawLine(panel.left + ps(18), y + rowH - ps(1), panel.right - ps(18), y + rowH - ps(1), linePaint(0x14FFFFFF, 0.6f));
         }
     }
@@ -1864,7 +1891,7 @@ public class CalculatorView extends View {
     private boolean settingsTouch(float x, float y) {
         float top = panel.top + ps(74);
         float footer = panel.bottom - ps(14);
-        int n = 12;
+        int n = 13;
         float rowH = (footer - top) / n;
         int idx = (int) ((y - top) / rowH);
         if (idx < 0 || idx >= n) return true;
@@ -1876,51 +1903,64 @@ public class CalculatorView extends View {
                 break;
             case 1: prefs.setAngle((prefs.angle() + 1) % 3); break;
             case 2: prefs.setFormat((prefs.format() + 1) % 4); break;
-            case 3: prefs.setDecimals(nextDecimals()); break;
-            case 4: prefs.setGrouping(!prefs.grouping()); break;
-            case 5: {
+            case 3:
+                prefs.setDecimalComma(!prefs.decimalComma());
+                toast(prefs.decimalComma() ? "Desimal: koma (0,5)" : "Desimal: titik (0.5)");
+                break;
+            case 4: prefs.setDecimals(nextDecimals()); break;
+            case 5: prefs.setGrouping(!prefs.grouping()); break;
+            case 6: {
                 boolean on = !prefs.haptics();
                 prefs.setHaptics(on);
-                if (on) vibrate(150);
-                toast(on ? "Getar aktif — tes 150 ms" : "Getar dimatikan");
-                break;
-            }
-            case 6: {
-                int v = nextHapticIntensity();
-                prefs.setHapticIntensity(v);
-                if (prefs.haptics()) vibrate(180);
-                toast("Intensitas getar: " + v + "%");
+                if (on) {
+                    if (vibrator == null || !vibrator.hasVibrator()) {
+                        toast("Motor getar tidak terdeteksi di HP ini");
+                    } else {
+                        vibrate(300);
+                        toast("Getar aktif — tes 300 ms");
+                    }
+                } else {
+                    toast("Getar dimatikan");
+                }
                 break;
             }
             case 7: {
+                int v = nextHapticIntensity();
+                prefs.setHapticIntensity(v);
+                if (prefs.haptics()) vibrate(220);
+                toast("Kekuatan getar: " + v + "%");
+                break;
+            }
+            case 8: {
                 boolean on = !prefs.sound();
                 prefs.setSound(on);
                 if (on) playClick();
                 toast(on ? "Suara tombol aktif" : "Suara tombol dimatikan");
                 break;
             }
-            case 8: {
+            case 9: {
                 int v = nextClickVolume();
                 prefs.setClickVolume(v);
                 if (prefs.sound()) playClick();
                 toast("Volume klik: " + v + "%");
                 break;
             }
-            case 9: prefs.setKeepAwake(!prefs.keepAwake()); setKeepScreenOn(prefs.keepAwake()); break;
-            case 10:
+            case 10: prefs.setKeepAwake(!prefs.keepAwake()); setKeepScreenOn(prefs.keepAwake()); break;
+            case 11:
                 clearAll();
                 memories = new double[10];
                 prefs.clearMemories();
                 history.clear();
                 prefs.clearHistory();
                 prefs.setAngle(0); prefs.setFormat(0); prefs.setDecimals(4);
-                prefs.setGrouping(true); prefs.setHaptics(true); prefs.setHapticIntensity(60);
+                prefs.setDecimalComma(true);
+                prefs.setGrouping(true); prefs.setHaptics(true); prefs.setHapticIntensity(100);
                 prefs.setSound(true); prefs.setClickVolume(30);
                 prefs.setKeepAwake(true); prefs.setTheme(0);
                 theme = Theme.byIndex(0);
                 buildChrome();
                 break;
-            case 11:
+            case 12:
                 toast("COKALKU SC-100 · a precision scientific calculator");
                 break;
             default: break;
@@ -2004,6 +2044,13 @@ public class CalculatorView extends View {
         }
     }
 }
+
+
+
+
+
+
+
 
 
 

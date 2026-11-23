@@ -152,14 +152,19 @@ public final class UnitConverter {
     }
 
     public static String formatValue(double v) {
+        return formatValue(v, false);
+    }
+
+    public static String formatValue(double v, boolean decimalComma) {
         if (Double.isNaN(v) || Double.isInfinite(v)) return "—";
         if (v == 0) return "0";
         java.math.BigDecimal bd = java.math.BigDecimal.valueOf(v)
                 .round(new java.math.MathContext(7, java.math.RoundingMode.HALF_UP));
-        String s = Formatter.format(bd, Formatter.Mode.AUTO, 7, false);
+        String s = Formatter.format(bd, Formatter.Mode.AUTO, 7, false, decimalComma);
         return s.replace("E", "e");
     }
 }
+
 
 
 

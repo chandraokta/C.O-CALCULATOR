@@ -302,20 +302,21 @@ Buka dengan tombol `MENU` di baris utilitas (portrait) atau `SET` (landscape).
 | **Theme** | GRAPHITE, SILVER, MIDNIGHT |
 | **Angle mode** | DEGREES, RADIANS, GRADS |
 | **Number format** | AUTO, FIX, SCI, ENG |
+| **Tanda desimal** | KOMA (`0,001`) atau TITIK (`0.001`) — default KOMA |
 | **Digits** | 2, 3, 4, 5, 6, 8, 10 |
 | **Grouping** | ON/OFF |
-| **Haptics** | ON/OFF — default ON |
-| **Haptic strength** | 20%, 40%, 60%, 80%, 100% — default 60% |
+| **Getar** | ON/OFF — default ON |
+| **Kekuatan getar** | 20%, 40%, 60%, 80%, 100% — default 100% |
 | **Key sound** | ON/OFF — default ON |
 | **Click volume** | 10%, 30%, 50%, 70%, 100% — default 30% |
 | **Keep awake** | ON/OFF |
-| **Reset instrument** | mengembalikan tema, sudut, format, digit, grouping, haptics, intensitas, suara, volume, dan data memori/riwayat ke awal |
+| **Reset instrument** | mengembalikan tema, sudut, format, digit, grouping, getar, kekuatan getar, suara, volume, dan data memori/riwayat ke awal |
 | **About COKALKU** | info versi |
 
 Perubahan langsung diterapkan dan disimpan. Tema juga mengubah warna body, tombol, dan LCD.
 
-**Getar dan suara:** keduanya aktif secara default. Saat Haptics diubah dari OFF ke ON,
-aplikasi langsung bergetar 150 ms sebagai tes. Begitu pula saat Key sound diubah OFF ke ON,
+**Getar dan suara:** keduanya aktif secara default. Saat Getar diubah dari OFF ke ON,
+aplikasi langsung bergetar 300 ms sebagai tes. Begitu pula saat Key sound diubah OFF ke ON,
 aplikasi langsung memutar bunyi klik. Jika getar tetap tidak terasa, periksa pengaturan getar
 sistem dan pastikan perangkat memiliki motor getar. Jika suara tidak terdengar, naikkan volume
 media; suara tombol diputar melalui SoundPool dan tidak bergantung pada pengaturan
@@ -384,6 +385,8 @@ Contoh lain yang sudah diuji:
 - [Desain FigCraft](../design/cokalku-sc100.figcraft)
 - [Screenshot aplikasi](../design/app)
 - [Build script](../app/build.ps1)
+
+
 
 
 

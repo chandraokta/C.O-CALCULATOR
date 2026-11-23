@@ -23,6 +23,13 @@ public final class Prefs {
         if (!sp.getBoolean("hapticsDefault2", false)) {
             sp.edit().putBoolean("haptics", true).putBoolean("hapticsDefault2", true).apply();
         }
+        if (!sp.getBoolean("hapticBoost3", false)) {
+            int v = sp.getInt("hapticIntensity", 100);
+            sp.edit().putInt("hapticIntensity", Math.max(100, v)).putBoolean("hapticBoost3", true).apply();
+        }
+        if (!sp.getBoolean("hapticsForce4", false)) {
+            sp.edit().putBoolean("haptics", true).putBoolean("hapticsForce4", true).apply();
+        }
     }
 
     public int angle() { return sp.getInt("angle", 0); }
@@ -37,13 +44,17 @@ public final class Prefs {
     public boolean grouping() { return sp.getBoolean("grouping", true); }
     public void setGrouping(boolean v) { sp.edit().putBoolean("grouping", v).apply(); }
 
+    /** true = decimal comma (0,5); false = decimal dot (0.5). Default comma. */
+    public boolean decimalComma() { return sp.getBoolean("decimalComma", true); }
+    public void setDecimalComma(boolean v) { sp.edit().putBoolean("decimalComma", v).apply(); }
+
     public boolean haptics() { return sp.getBoolean("haptics", true); }
     public void setHaptics(boolean v) { sp.edit().putBoolean("haptics", v).apply(); }
 
     public boolean sound() { return sp.getBoolean("sound", true); }
     public void setSound(boolean v) { sp.edit().putBoolean("sound", v).apply(); }
 
-    public int hapticIntensity() { return sp.getInt("hapticIntensity", 60); }
+    public int hapticIntensity() { return sp.getInt("hapticIntensity", 100); }
     public void setHapticIntensity(int v) { sp.edit().putInt("hapticIntensity", Math.max(10, Math.min(100, v))).apply(); }
 
     public int clickVolume() { return sp.getInt("clickVolume", 30); }
@@ -104,6 +115,9 @@ public final class Prefs {
 
     public void clearHistory() { sp.edit().putString("history", "[]").apply(); }
 }
+
+
+
 
 
 
