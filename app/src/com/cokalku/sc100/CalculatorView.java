@@ -19,6 +19,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.os.VibratorManager;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
@@ -62,6 +63,8 @@ public class CalculatorView extends View {
     private int clickSound;
     private volatile boolean clickReady;
     private Vibrator vibrator;
+    private boolean resultRecorded;
+    private String displayOverride;
 
     private Bitmap chrome;
     private int W, H;
@@ -141,7 +144,12 @@ public class CalculatorView extends View {
         setHapticFeedbackEnabled(true);
         setFocusable(true);
         setFocusableInTouchMode(true);
-        vibrator = (Vibrator) c.getSystemService(Context.VIBRATOR_SERVICE);
+        if (Build.VERSION.SDK_INT >= 31) {
+            VibratorManager vm = (VibratorManager) c.getSystemService(Context.VIBRATOR_MANAGER_SERVICE);
+            vibrator = vm == null ? null : vm.getDefaultVibrator();
+        } else {
+            vibrator = (Vibrator) c.getSystemService(Context.VIBRATOR_SERVICE);
+        }
         try {
             AudioAttributes attrs = new AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_MEDIA)
@@ -716,6 +724,7 @@ public class CalculatorView extends View {
 
     private String displayText() {
         if (errorState) return "Error";
+        if (displayOverride != null) return displayOverride;
         if (justEvaluated) return format(lastResult);
         if (expr.isEmpty()) return "0";
         // While typing, show the current entry, never a live result. The result appears on =.
@@ -857,12 +866,19 @@ public class CalculatorView extends View {
     private void clearAll() {
         expr = ""; lastExpr = ""; errorState = false; justEvaluated = false;
         lastResult = BigDecimal.ZERO;
+        resultRecorded = false;
         shift = false; hyp = false;
         invalidate();
     }
 
     private void equals() {
-        if (expr.trim().isEmpty()) return;
+        if (expr.trim().isEmpty()) {
+            if (justEvaluated && !resultRecorded && lastExpr != null && !lastExpr.isEmpty()) {
+                remember(lastExpr, lastResult);
+                resultRecorded = true;
+            }
+            return;
+        }
         String candidate = completeExpression(expr);
         try {
             BigDecimal v = CalcEngine.eval(candidate, engineCtx());
@@ -870,10 +886,8 @@ public class CalculatorView extends View {
             lastExpr = candidate;
             android.util.Log.d("COKALKU", "eval " + candidate + " = " + v.toPlainString());
             justEvaluated = true;
-            String shown = format(v);
-            history.add(0, new HistoryItem(candidate, shown, v.stripTrailingZeros().toPlainString(), System.currentTimeMillis()));
-            while (history.size() > 50) history.remove(history.size() - 1);
-            prefs.saveHistory(history);
+            remember(candidate, v);
+            resultRecorded = true;
             errorState = false;
             expr = "";
             shift = false; hyp = false;
@@ -891,6 +905,13 @@ public class CalculatorView extends View {
      * Real calculators close an open function on =, so "sin 30 =" means sin(30).
      * It also drops a trailing decimal point, e.g. "2." to "2".
      */
+    private void remember(String expression, BigDecimal value) {
+        String shown = format(value);
+        history.add(0, new HistoryItem(expression, shown, value.stripTrailingZeros().toPlainString(), System.currentTimeMillis()));
+        while (history.size() > 50) history.remove(history.size() - 1);
+        prefs.saveHistory(history);
+    }
+
     private String completeExpression(String raw) {
         String s = raw.trim();
         if (s.endsWith(".")) s = s.substring(0, s.length() - 1);
@@ -969,6 +990,7 @@ public class CalculatorView extends View {
     }
 
     private void perform(Key k, boolean alt) {
+        displayOverride = null;
         String a = (alt && k.alt != null) ? k.alt : k.action;
         if (a == null) return;
         switch (a) {
@@ -991,17 +1013,17 @@ public class CalculatorView extends View {
             case "lparen": insert("("); break;
             case "rparen": insert(")"); break;
             case "percent": insert("%"); break;
-            case "fact": insert("!"); break;
+            case "fact": if (!applyPostfix("!")) insert("!"); break;
             case "eq": equals(); break;
             case "del": backspace(); break;
             case "ac": clearAll(); break;
             case "sign": toggleSign(); break;
             case "exp": insert("e"); break;
-            case "sqrt": insertFunction("√"); break;
-            case "cbrt": insertFunction("∛"); break;
-            case "sq": insert("^2"); break;
-            case "cube": insert("^3"); break;
-            case "inv": if (expr.isEmpty()) expr = "1/("; else expr = "1/(" + expr + ")"; justEvaluated = false; invalidate(); break;
+            case "sqrt": if (!applyUnary("√")) insertFunction("√"); break;
+            case "cbrt": if (!applyUnary("∛")) insertFunction("∛"); break;
+            case "sq": if (!applyPostfix("^2")) insert("^2"); break;
+            case "cube": if (!applyPostfix("^3")) insert("^3"); break;
+            case "inv": if (!applyUnary("1/")) { if (expr.isEmpty()) expr = "1/("; else expr = "1/(" + expr + ")"; justEvaluated = false; invalidate(); } break;
             case "sin": trig("sin", false); break;
             case "cos": trig("cos", false); break;
             case "tan": trig("tan", false); break;
@@ -1009,10 +1031,10 @@ public class CalculatorView extends View {
             case "acos": trig("cos", true); break;
             case "atan": trig("tan", true); break;
             case "hyp": hyp = !hyp; invalidate(); break;
-            case "ln": insertFunction("ln"); break;
-            case "log": insertFunction("log"); break;
-            case "expf": insertFunction("exp"); break;
-            case "pow10": insertFunction("10^"); break;
+            case "ln": if (!applyUnary("ln")) insertFunction("ln"); break;
+            case "log": if (!applyUnary("log")) insertFunction("log"); break;
+            case "expf": if (!applyUnary("exp")) insertFunction("exp"); break;
+            case "pow10": if (!applyUnary("10^")) insertFunction("10^"); break;
             case "shift": shift = !shift; if (!shift) hyp = false; invalidate(); break;
             case "drg": prefs.setAngle((prefs.angle() + 1) % 3); invalidate(); break;
             case "fse": prefs.setFormat((prefs.format() + 1) % 4); invalidate(); break;
@@ -1053,10 +1075,157 @@ public class CalculatorView extends View {
     private String radixMode = "dec";
     private String radixValue = "";
 
+    /**
+     * Applies a unary function the way a pocket calculator does: 30 then sin gives 0.5,
+     * instead of requiring sin(30). It returns false when there is no value to apply to,
+     * so the caller can fall back to the prefix "sin(" entry style.
+     */
+    private boolean applyUnary(String fn) {
+        if (expr.trim().isEmpty() && !justEvaluated) return false;
+        displayOverride = null;
+        String target;
+        String prefix = "";
+        if (justEvaluated) {
+            target = lastResult.stripTrailingZeros().toPlainString();
+        } else {
+            String s = expr.trim();
+            if (!balanced(s)) return false;
+            int start = entryStart(s);
+            if (start >= 0) {
+                target = s.substring(start);
+                prefix = s.substring(0, start);
+            } else if (s.endsWith(")") || s.endsWith("!") || s.endsWith("%")
+                    || s.equals("π") || s.equals("e") || s.endsWith("π")) {
+                target = s;
+            } else {
+                return false;
+            }
+        }
+        String inner = fn + "(" + target + ")";
+        try {
+            BigDecimal v = CalcEngine.eval(completeExpression(inner), engineCtx());
+            if (prefix.isEmpty()) {
+                lastResult = v;
+                lastExpr = completeExpression(inner);
+                justEvaluated = true;
+                expr = "";
+                displayOverride = null;
+            } else {
+                expr = prefix + inner;
+                lastExpr = expr;
+                justEvaluated = false;
+                displayOverride = format(v);
+            }
+            resultRecorded = false;
+            errorState = false;
+            shift = false;
+            hyp = false;
+            android.util.Log.d("COKALKU", "immediate " + lastExpr + " = " + v.toPlainString());
+        } catch (CalcEngine.EvalException e) {
+            errorState = true;
+            errorMessage = e.getMessage() == null ? "Error" : e.getMessage();
+        } catch (Exception e) {
+            errorState = true;
+            errorMessage = "Error";
+        }
+        invalidate();
+        return true;
+    }
+
+    private boolean applyPostfix(String suffix) {
+        if (expr.trim().isEmpty() && !justEvaluated) return false;
+        displayOverride = null;
+        String target;
+        String prefix = "";
+        if (justEvaluated) {
+            target = lastResult.stripTrailingZeros().toPlainString();
+        } else {
+            String s = expr.trim();
+            if (!balanced(s)) return false;
+            int start = entryStart(s);
+            if (start >= 0) {
+                target = s.substring(start);
+                prefix = s.substring(0, start);
+            } else if (s.endsWith(")") || s.endsWith("!") || s.endsWith("%")
+                    || s.equals("π") || s.equals("e") || s.endsWith("π")) {
+                target = s;
+            } else {
+                return false;
+            }
+        }
+        String inner = target + suffix;
+        try {
+            BigDecimal v = CalcEngine.eval(completeExpression(inner), engineCtx());
+            if (prefix.isEmpty()) {
+                lastResult = v;
+                lastExpr = completeExpression(inner);
+                justEvaluated = true;
+                expr = "";
+                displayOverride = null;
+            } else {
+                expr = prefix + inner;
+                lastExpr = expr;
+                justEvaluated = false;
+                displayOverride = format(v);
+            }
+            resultRecorded = false;
+            errorState = false;
+            shift = false;
+            hyp = false;
+            android.util.Log.d("COKALKU", "immediate " + lastExpr + " = " + v.toPlainString());
+        } catch (CalcEngine.EvalException e) {
+            errorState = true;
+            errorMessage = e.getMessage() == null ? "Error" : e.getMessage();
+        } catch (Exception e) {
+            errorState = true;
+            errorMessage = "Error";
+        }
+        invalidate();
+        return true;
+    }
+
+    /** Index where the number currently being typed starts, or -1 when the last token is not a number. */
+    private int entryStart(String s) {
+        if (s.isEmpty()) return -1;
+        char last = s.charAt(s.length() - 1);
+        if (last == ')' || last == '!' || last == '%' || last == 'π') return -1;
+        int end = s.length();
+        if (isOp(last)) {
+            end--;
+            while (end > 0 && Character.isWhitespace(s.charAt(end - 1))) end--;
+        }
+        int start = end;
+        while (start > 0) {
+            char ch = s.charAt(start - 1);
+            if (Character.isDigit(ch) || ch == '.') { start--; continue; }
+            if ((ch == 'e' || ch == 'E') && start < end) { start--; continue; }
+            if ((ch == '-' || ch == '+') && start >= 2 && (s.charAt(start - 2) == 'e' || s.charAt(start - 2) == 'E')) {
+                start--; continue;
+            }
+            break;
+        }
+        if (start == end) return -1;
+        if (start > 0 && s.charAt(start - 1) == '-'
+                && (start == 1 || isOp(s.charAt(start - 2)) || s.charAt(start - 2) == '(')) {
+            start--;
+        }
+        return start;
+    }
+
+    private boolean balanced(String s) {
+        int n = 0;
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c == '(') n++;
+            else if (c == ')' && --n < 0) return false;
+        }
+        return n == 0;
+    }
+
     private void trig(String base, boolean inverse) {
         String name = (inverse ? "a" : "") + base + (hyp ? "h" : "");
+        if (!applyUnary(name)) insertFunction(name);
         hyp = false;
-        insertFunction(name);
     }
 
     // ---------------------------------------------------------------- touch
@@ -1068,6 +1237,7 @@ public class CalculatorView extends View {
                 if (k == null) return true;
                 pressed = k;
                 longFired = false;
+                feedback(false);
                 downX = e.getX(); downY = e.getY();
                 if (k.alt != null) {
                     longPressRunnable = () -> {
@@ -1096,7 +1266,6 @@ public class CalculatorView extends View {
                 pressed = null;
                 if (k != null && keyAt(e.getX(), e.getY()) == k) {
                     boolean useAlt = shift || longFired;
-                    feedback(false);
                     if (k.action.equals("shift")) perform(k, false);
                     else perform(k, useAlt);
                 }
@@ -1122,15 +1291,20 @@ public class CalculatorView extends View {
 
     private void feedback(boolean longPress) {
         if (prefs.haptics()) {
-            performHapticFeedback(longPress ? HapticFeedbackConstants.LONG_PRESS : HapticFeedbackConstants.VIRTUAL_KEY);
-            vibrate(longPress ? 28 : 16);
+            try {
+                performHapticFeedback(longPress ? HapticFeedbackConstants.LONG_PRESS : HapticFeedbackConstants.VIRTUAL_KEY,
+                        HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+            } catch (Exception ignored) {}
+            vibrate(longPress ? 55 : 40);
         }
-        if (prefs.sound()) {
-            if (soundPool != null && clickSound != 0 && clickReady) {
-                if (soundPool.play(clickSound, 0.8f, 0.8f, 1, 0, 1.0f) == 0) fallbackClick();
-            } else {
-                fallbackClick();
-            }
+        if (prefs.sound()) playClick();
+    }
+
+    private void playClick() {
+        if (soundPool != null && clickSound != 0 && clickReady) {
+            if (soundPool.play(clickSound, 0.8f, 0.8f, 1, 0, 1.0f) == 0) fallbackClick();
+        } else {
+            fallbackClick();
         }
     }
 
@@ -1145,7 +1319,7 @@ public class CalculatorView extends View {
         if (vibrator == null || !vibrator.hasVibrator()) return;
         try {
             if (Build.VERSION.SDK_INT >= 26) {
-                vibrator.vibrate(VibrationEffect.createOneShot(ms, VibrationEffect.DEFAULT_AMPLITUDE));
+                vibrator.vibrate(VibrationEffect.createOneShot(ms, 200));
             } else {
                 vibrator.vibrate(ms);
             }
@@ -1646,7 +1820,7 @@ public class CalculatorView extends View {
                 prefs.sound() ? "ON" : "OFF",
                 prefs.keepAwake() ? "ON" : "OFF",
                 "TOUCH TO RESET",
-                "SC-100 · 1.1"
+                "SC-100 · 1.2"
         };
         float top = panel.top + ps(74);
         float footer = panel.bottom - ps(14);
@@ -1678,8 +1852,20 @@ public class CalculatorView extends View {
             case 2: prefs.setFormat((prefs.format() + 1) % 4); break;
             case 3: prefs.setDecimals(nextDecimals()); break;
             case 4: prefs.setGrouping(!prefs.grouping()); break;
-            case 5: prefs.setHaptics(!prefs.haptics()); break;
-            case 6: prefs.setSound(!prefs.sound()); break;
+            case 5: {
+                boolean on = !prefs.haptics();
+                prefs.setHaptics(on);
+                if (on) vibrate(150);
+                toast(on ? "Getar aktif — tes 150 ms" : "Getar dimatikan");
+                break;
+            }
+            case 6: {
+                boolean on = !prefs.sound();
+                prefs.setSound(on);
+                if (on) playClick();
+                toast(on ? "Suara tombol aktif" : "Suara tombol dimatikan");
+                break;
+            }
             case 7: prefs.setKeepAwake(!prefs.keepAwake()); setKeepScreenOn(prefs.keepAwake()); break;
             case 8:
                 clearAll();
@@ -1688,7 +1874,7 @@ public class CalculatorView extends View {
                 history.clear();
                 prefs.clearHistory();
                 prefs.setAngle(0); prefs.setFormat(0); prefs.setDecimals(4);
-                prefs.setGrouping(true); prefs.setHaptics(true); prefs.setSound(false);
+                prefs.setGrouping(true); prefs.setHaptics(true); prefs.setSound(true);
                 prefs.setKeepAwake(true); prefs.setTheme(0);
                 theme = Theme.byIndex(0);
                 buildChrome();
@@ -1759,6 +1945,19 @@ public class CalculatorView extends View {
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

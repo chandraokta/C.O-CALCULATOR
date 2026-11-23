@@ -20,6 +20,9 @@ public final class Prefs {
         if (!sp.getBoolean("soundDefault2", false)) {
             sp.edit().putBoolean("sound", true).putBoolean("soundDefault2", true).apply();
         }
+        if (!sp.getBoolean("hapticsDefault2", false)) {
+            sp.edit().putBoolean("haptics", true).putBoolean("hapticsDefault2", true).apply();
+        }
     }
 
     public int angle() { return sp.getInt("angle", 0); }
@@ -95,6 +98,7 @@ public final class Prefs {
 
     public void clearHistory() { sp.edit().putString("history", "[]").apply(); }
 }
+
 
 
 

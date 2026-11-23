@@ -64,6 +64,8 @@ Panduan lengkap semua tombol, fitur, dan contoh perhitungan ada di
   multiplication (`2π`, `2(3+4)`).
 - **Scientific functions:** sin, cos, tan, inverse and hyperbolic variants, `ln`, `log`,
   `eˣ`, `10ˣ`, powers, square/cube roots, reciprocal, factorial, `nCr`, `nPr`, `mod`.
+- **Pocket-calculator entry:** enter the number first, then the function — `30` then `sin`
+  gives `0.5` immediately. Expression results still appear when `=` is pressed.
 - **Angle modes:** degrees, radians and grads.
 - **12-digit LCD** with a real seven-segment typeface, superscript exponents and status
   indicators (DEG/RAD/GRAD, 2nd, HYP, M, 12 DIGIT).
@@ -151,6 +153,7 @@ Feature and interaction inspiration: [RealCalc Scientific Calculator on Google P
 and the APK supplied in this workspace for study. The seven-segment typeface is
 [DSEG7 Classic](https://github.com/keshikan/DSEG) (SIL Open Font License); its license is
 included at `app/assets/fonts/DSEG-OFL.txt`; the runtime copy is `app/res/raw/dseg.ttf`.
+
 
 
 
