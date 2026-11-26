@@ -181,6 +181,7 @@ Buka dengan `MENU` (portrait) atau `SET` (landscape).
 | Pemisah ribuan | AKTIF/NONAKTIF | 1.234.567 / 1234567 |
 | Getar | AKTIF/NONAKTIF | getar saat tombol ditekan |
 | Kekuatan getar | 20%–100% | default 100% |
+| Tes getar | ketuk | mengirim pola getar 1,5 detik |
 | Suara tombol | AKTIF/NONAKTIF | bunyi klik |
 | Volume klik | 10%–100% | default 30% |
 | Layar tetap menyala | AKTIF/NONAKTIF | layar tidak tidur saat aplikasi aktif |
@@ -224,5 +225,6 @@ Putar perangkat; konfigurasi dan hasil tidak hilang.
 
 Jika ada hasil yang tidak sesuai, sertakan urutan tombol dan hasil yang muncul saat
 melaporkan masalah.
+
 
 

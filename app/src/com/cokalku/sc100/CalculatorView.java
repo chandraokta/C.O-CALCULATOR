@@ -1360,17 +1360,42 @@ public class CalculatorView extends View {
         int amp = Math.max(1, Math.min(255, prefs.hapticIntensity() * 255 / 100));
         try {
             if (Build.VERSION.SDK_INT >= 26) {
-                vibrator.vibrate(VibrationEffect.createOneShot(ms, amp));
+                // Some devices silently ignore an explicit amplitude. Use the platform
+                // default amplitude when the actuator cannot control amplitude.
+                int amplitude = vibrator.hasAmplitudeControl() ? amp : VibrationEffect.DEFAULT_AMPLITUDE;
+                vibrator.vibrate(VibrationEffect.createOneShot(ms, amplitude));
+                android.util.Log.d("COKALKU", "vibrate " + ms + "ms amp=" + amplitude
+                        + " control=" + vibrator.hasAmplitudeControl());
             } else {
                 vibrator.vibrate(ms);
             }
-            android.util.Log.d("COKALKU", "vibrate " + ms + "ms amp=" + amp);
         } catch (Exception e) {
             try {
                 vibrator.vibrate(new long[]{0, ms}, -1);
                 android.util.Log.d("COKALKU", "vibrate fallback " + ms + "ms");
             } catch (Exception ignored) {
                 android.util.Log.d("COKALKU", "vibrate failed: " + e);
+            }
+        }
+    }
+
+    /** A long, unmistakable pattern used by the Settings test. */
+    private void vibrateTest() {
+        if (vibrator == null || !vibrator.hasVibrator()) return;
+        long[] pattern = {0, 300, 120, 300, 120, 600};
+        try {
+            if (Build.VERSION.SDK_INT >= 26) {
+                vibrator.vibrate(VibrationEffect.createWaveform(pattern, -1));
+            } else {
+                vibrator.vibrate(pattern, -1);
+            }
+            android.util.Log.d("COKALKU", "vibrate test pattern sent");
+        } catch (Exception e) {
+            try {
+                vibrator.vibrate(pattern, -1);
+                android.util.Log.d("COKALKU", "vibrate test legacy fallback");
+            } catch (Exception ignored) {
+                android.util.Log.d("COKALKU", "vibrate test failed: " + e);
             }
         }
     }
@@ -1856,9 +1881,9 @@ public class CalculatorView extends View {
     }
 
     private void drawSettings(Canvas c) {
-        setupPanel(c, "PENGATURAN", "PREFERENSI ALAT", 0.86f, 0.86f);
+        setupPanel(c, "PENGATURAN", "PREFERENSI ALAT", 0.86f, 0.88f);
         String[] labels = {"Tema", "Mode sudut", "Format angka", "Tanda desimal", "Jumlah digit", "Pemisah ribuan",
-                "Getar", "Kekuatan getar", "Suara tombol", "Volume klik", "Layar tetap menyala",
+                "Getar", "Kekuatan getar", "Tes getar", "Suara tombol", "Volume klik", "Layar tetap menyala",
                 "Reset alat", "Tentang C.O CALCULATOR"};
         String[] values = {
                 prefs.theme() == 0 ? "GRAFIT" : prefs.theme() == 1 ? "PERAK" : "TENGAH MALAM",
@@ -1869,11 +1894,12 @@ public class CalculatorView extends View {
                 prefs.grouping() ? "AKTIF" : "NONAKTIF",
                 prefs.haptics() ? "AKTIF" : "NONAKTIF",
                 prefs.hapticIntensity() + "%",
+                "KETUK UNTUK TES",
                 prefs.sound() ? "AKTIF" : "NONAKTIF",
                 prefs.clickVolume() + "%",
                 prefs.keepAwake() ? "AKTIF" : "NONAKTIF",
                 "KETUK UNTUK RESET",
-                "SC-100 · 1.6"
+                "SC-100 · 1.7"
         };
         float top = panel.top + ps(74);
         float footer = panel.bottom - ps(14);
@@ -1883,7 +1909,7 @@ public class CalculatorView extends View {
             if (i % 2 == 0) card(c, new RectF(panel.left + ps(8), y, panel.right - ps(8), y + rowH - ps(2)), 0x06FFFFFF, 0, ps(5), false);
             text(c, labels[i], panel.left + ps(18), y + rowH * 0.60f, ps(11.0f), 0xFFDCDCE3, medium, Paint.Align.LEFT);
             text(c, values[i], panel.right - ps(20), y + rowH * 0.60f, ps(9.5f),
-                    i == 11 ? 0xFFE7A0A0 : 0xFFA99BFF, boldFace, Paint.Align.RIGHT);
+                    i == 12 ? 0xFFE7A0A0 : 0xFFA99BFF, boldFace, Paint.Align.RIGHT);
             c.drawLine(panel.left + ps(18), y + rowH - ps(1), panel.right - ps(18), y + rowH - ps(1), linePaint(0x14FFFFFF, 0.6f));
         }
     }
@@ -1891,7 +1917,7 @@ public class CalculatorView extends View {
     private boolean settingsTouch(float x, float y) {
         float top = panel.top + ps(74);
         float footer = panel.bottom - ps(14);
-        int n = 13;
+        int n = 14;
         float rowH = (footer - top) / n;
         int idx = (int) ((y - top) / rowH);
         if (idx < 0 || idx >= n) return true;
@@ -1916,8 +1942,8 @@ public class CalculatorView extends View {
                     if (vibrator == null || !vibrator.hasVibrator()) {
                         toast("Motor getar tidak terdeteksi di perangkat ini");
                     } else {
-                        vibrate(300);
-                        toast("Getar aktif — tes 300 ms");
+                        vibrateTest();
+                        toast("Getar aktif — tes pola 1,5 detik");
                     }
                 } else {
                     toast("Getar dimatikan");
@@ -1927,26 +1953,36 @@ public class CalculatorView extends View {
             case 7: {
                 int v = nextHapticIntensity();
                 prefs.setHapticIntensity(v);
-                if (prefs.haptics()) vibrate(220);
+                if (prefs.haptics()) vibrateTest();
                 toast("Kekuatan getar: " + v + "%");
                 break;
             }
             case 8: {
+                if (vibrator == null || !vibrator.hasVibrator()) {
+                    toast("Motor getar tidak terdeteksi di perangkat ini");
+                } else {
+                    if (!prefs.haptics()) prefs.setHaptics(true);
+                    vibrateTest();
+                    toast("Tes getar dikirim — pola 1,5 detik");
+                }
+                break;
+            }
+            case 9: {
                 boolean on = !prefs.sound();
                 prefs.setSound(on);
                 if (on) playClick();
                 toast(on ? "Suara tombol aktif" : "Suara tombol dimatikan");
                 break;
             }
-            case 9: {
+            case 10: {
                 int v = nextClickVolume();
                 prefs.setClickVolume(v);
                 if (prefs.sound()) playClick();
                 toast("Volume klik: " + v + "%");
                 break;
             }
-            case 10: prefs.setKeepAwake(!prefs.keepAwake()); setKeepScreenOn(prefs.keepAwake()); break;
-            case 11:
+            case 11: prefs.setKeepAwake(!prefs.keepAwake()); setKeepScreenOn(prefs.keepAwake()); break;
+            case 12:
                 clearAll();
                 memories = new double[10];
                 prefs.clearMemories();
@@ -1960,7 +1996,7 @@ public class CalculatorView extends View {
                 theme = Theme.byIndex(0);
                 buildChrome();
                 break;
-            case 12:
+            case 13:
                 toast("C.O CALCULATOR SC-100 · kalkulator ilmiah presisi");
                 break;
             default: break;
@@ -2044,6 +2080,10 @@ public class CalculatorView extends View {
         }
     }
 }
+
+
+
+
 
 
 

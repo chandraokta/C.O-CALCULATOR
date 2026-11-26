@@ -307,6 +307,7 @@ Buka dengan tombol `MENU` di baris utilitas (portrait) atau `SET` (landscape).
 | **Pemisah ribuan** | AKTIF/NONAKTIF |
 | **Getar** | AKTIF/NONAKTIF — default AKTIF |
 | **Kekuatan getar** | 20%, 40%, 60%, 80%, 100% — default 100% |
+| **Tes getar** | ketuk untuk mengirim pola getar 1,5 detik |
 | **Suara tombol** | AKTIF/NONAKTIF — default AKTIF |
 | **Volume klik** | 10%, 30%, 50%, 70%, 100% — default 30% |
 | **Layar tetap menyala** | AKTIF/NONAKTIF |
@@ -386,6 +387,7 @@ Contoh lain yang sudah diuji:
 - [Desain FigCraft](../design/cokalku-sc100.figcraft)
 - [Screenshot aplikasi](../design/app)
 - [Build script](../app/build.ps1)
+
 
 
 

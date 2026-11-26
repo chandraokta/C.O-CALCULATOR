@@ -84,6 +84,7 @@ Panduan lengkap semua tombol, fitur, dan contoh perhitungan ada di
 - **Decimal mark:** comma by default (`0,001`), with a dot option (`0.001`).
 - **Press feedback:** every key flashes darker while pressed and fades back.
 - **Language:** calculator interface is English; the Settings menu is fully Indonesian.
+- **Vibration test:** a dedicated Settings row sends a 1.5-second pattern and reports if no motor is detected.
 - **Portrait and landscape** layouts, immersive full-screen, keep-awake.
 - **32-digit internal arithmetic** using `BigDecimal` (DECIMAL128) for the four basic
   operations; transcendental functions use double precision and are formatted to 12 digits.
@@ -159,6 +160,7 @@ Feature and interaction inspiration: [RealCalc Scientific Calculator on Google P
 and the APK supplied in this workspace for study. The seven-segment typeface is
 [DSEG7 Classic](https://github.com/keshikan/DSEG) (SIL Open Font License); its license is
 included at `app/assets/fonts/DSEG-OFL.txt`; the runtime copy is `app/res/raw/dseg.ttf`.
+
 
 
 
