@@ -1,7 +1,7 @@
 # C.O CALCULATOR SC-100
 
-**Repository:** [github.com/chandraokta/CO-CALCULATOR](https://github.com/chandraokta/CO-CALCULATOR)  
-**Latest release:** [v1.7 — C.O CALCULATOR](https://github.com/chandraokta/CO-CALCULATOR/releases/tag/v1.7)
+**Repository:** [github.com/chandraokta/C.O-CALCULATOR](https://github.com/chandraokta/C.O-CALCULATOR)  
+**Latest release:** [v1.7 — C.O CALCULATOR](https://github.com/chandraokta/C.O-CALCULATOR/releases/tag/v1.7)
 
 A new Android scientific calculator with the tactile, physical-instrument feel of a classic
 pocket calculator. The product and interface are original; the feature set and the level of
@@ -163,6 +163,7 @@ Feature and interaction inspiration: [RealCalc Scientific Calculator on Google P
 and the APK supplied in this workspace for study. The seven-segment typeface is
 [DSEG7 Classic](https://github.com/keshikan/DSEG) (SIL Open Font License); its license is
 included at `app/assets/fonts/DSEG-OFL.txt`; the runtime copy is `app/res/raw/dseg.ttf`.
+
 
 
 
