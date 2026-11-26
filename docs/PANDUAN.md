@@ -299,24 +299,24 @@ Buka dengan tombol `MENU` di baris utilitas (portrait) atau `SET` (landscape).
 
 | Baris | Pilihan |
 |---|---|
-| **Theme** | GRAPHITE, SILVER, MIDNIGHT |
-| **Angle mode** | DEGREES, RADIANS, GRADS |
-| **Number format** | AUTO, FIX, SCI, ENG |
-| **Decimal mark** | COMMA (`0,001`) atau DOT (`0.001`) — default COMMA |
-| **Digits** | 2, 3, 4, 5, 6, 8, 10 |
-| **Grouping** | ON/OFF |
-| **Vibration** | ON/OFF — default ON |
-| **Vibration strength** | 20%, 40%, 60%, 80%, 100% — default 100% |
-| **Key sound** | ON/OFF — default ON |
-| **Click volume** | 10%, 30%, 50%, 70%, 100% — default 30% |
-| **Keep awake** | ON/OFF |
-| **Reset instrument** | mengembalikan tema, sudut, format, digit, grouping, getar, kekuatan getar, suara, volume, dan data memori/riwayat ke awal |
-| **About C.O CALCULATOR** | info versi |
+| **Tema** | GRAFIT, PERAK, TENGAH MALAM |
+| **Mode sudut** | DERAJAT, RADIAN, GRADIAN |
+| **Format angka** | AUTO, FIX, SCI, ENG |
+| **Tanda desimal** | KOMA (`0,001`) atau TITIK (`0.001`) — default KOMA |
+| **Jumlah digit** | 2, 3, 4, 5, 6, 8, 10 |
+| **Pemisah ribuan** | AKTIF/NONAKTIF |
+| **Getar** | AKTIF/NONAKTIF — default AKTIF |
+| **Kekuatan getar** | 20%, 40%, 60%, 80%, 100% — default 100% |
+| **Suara tombol** | AKTIF/NONAKTIF — default AKTIF |
+| **Volume klik** | 10%, 30%, 50%, 70%, 100% — default 30% |
+| **Layar tetap menyala** | AKTIF/NONAKTIF |
+| **Reset alat** | mengembalikan tema, sudut, format, digit, pemisah ribuan, getar, kekuatan getar, suara, volume, dan data memori/riwayat ke awal |
+| **Tentang C.O CALCULATOR** | info versi |
 
 Perubahan langsung diterapkan dan disimpan. Tema juga mengubah warna body, tombol, dan LCD.
 
-**Vibration dan suara:** keduanya aktif secara default. Saat Vibration diubah dari OFF ke ON,
-aplikasi langsung bergetar 300 ms sebagai tes. Begitu pula saat Key sound diubah OFF ke ON,
+**Getar dan suara:** keduanya aktif secara default. Saat Getar diubah dari NONAKTIF ke AKTIF,
+aplikasi langsung bergetar 300 ms sebagai tes. Begitu pula saat Suara tombol diubah NONAKTIF ke AKTIF,
 aplikasi langsung memutar bunyi klik. Jika getar tetap tidak terasa, periksa pengaturan getar
 sistem dan pastikan perangkat memiliki motor getar. Jika suara tidak terdengar, naikkan volume
 media; suara tombol diputar melalui SoundPool dan tidak bergantung pada pengaturan
@@ -386,6 +386,8 @@ Contoh lain yang sudah diuji:
 - [Desain FigCraft](../design/cokalku-sc100.figcraft)
 - [Screenshot aplikasi](../design/app)
 - [Build script](../app/build.ps1)
+
+
 
 
 

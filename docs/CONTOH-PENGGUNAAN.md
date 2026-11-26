@@ -3,8 +3,8 @@
 Dokumen ini berisi contoh perhitungan untuk **setiap fitur** di aplikasi.
 Urutan tombol ditulis dengan tanda `→`. Hasil memakai desimal koma (default).
 
-> Tampilan aplikasi memakai bahasa Inggris sepenuhnya. Panduan ini tetap
-> berbahasa Indonesia agar mudah diikuti.
+> Tampilan utama memakai bahasa Inggris; menu **Pengaturan** memakai bahasa
+> Indonesia. Panduan ini berbahasa Indonesia.
 
 ---
 
@@ -173,18 +173,18 @@ Buka dengan `MENU` (portrait) atau `SET` (landscape).
 
 | Fitur | Pilihan | Contoh |
 |---|---|---|
-| Theme | GRAPHITE / SILVER / MIDNIGHT | mengganti warna body dan tombol |
-| Angle mode | DEGREES / RADIANS / GRADS | `sin 30 =` → 0,5 di DEGREES |
-| Number format | AUTO / FIX / SCI / ENG | `1 ÷ 3 =` → 0,3333 di FIX 4 |
-| Decimal mark | COMMA / DOT | `1 ÷ 1000 =` → 0,001 / 0.001 |
-| Digits | 2, 3, 4, 5, 6, 8, 10 | jumlah digit desimal |
-| Grouping | ON/OFF | 1.234.567 / 1234567 |
-| Vibration | ON/OFF | getar saat tombol ditekan |
-| Vibration strength | 20%–100% | default 100% |
-| Key sound | ON/OFF | bunyi klik |
-| Click volume | 10%–100% | default 30% |
-| Keep awake | ON/OFF | layar tidak tidur saat aplikasi aktif |
-| Reset instrument | ketuk | mengembalikan semua pengaturan dan data awal |
+| Tema | GRAFIT / PERAK / TENGAH MALAM | mengganti warna body dan tombol |
+| Mode sudut | DERAJAT / RADIAN / GRADIAN | `sin 30 =` → 0,5 di DERAJAT |
+| Format angka | AUTO / FIX / SCI / ENG | `1 ÷ 3 =` → 0,3333 di FIX 4 |
+| Tanda desimal | KOMA / TITIK | `1 ÷ 1000 =` → 0,001 / 0.001 |
+| Jumlah digit | 2, 3, 4, 5, 6, 8, 10 | jumlah digit desimal |
+| Pemisah ribuan | AKTIF/NONAKTIF | 1.234.567 / 1234567 |
+| Getar | AKTIF/NONAKTIF | getar saat tombol ditekan |
+| Kekuatan getar | 20%–100% | default 100% |
+| Suara tombol | AKTIF/NONAKTIF | bunyi klik |
+| Volume klik | 10%–100% | default 30% |
+| Layar tetap menyala | AKTIF/NONAKTIF | layar tidak tidur saat aplikasi aktif |
+| Reset alat | ketuk | mengembalikan semua pengaturan dan data awal |
 
 ## 14. Tombol tampilan dan jawaban
 
@@ -224,4 +224,5 @@ Putar perangkat; konfigurasi dan hasil tidak hilang.
 
 Jika ada hasil yang tidak sesuai, sertakan urutan tombol dan hasil yang muncul saat
 melaporkan masalah.
+
 
