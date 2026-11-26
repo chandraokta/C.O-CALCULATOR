@@ -1,5 +1,8 @@
 # C.O CALCULATOR SC-100
 
+**Repository:** [github.com/chandraokta/CO-CALCULATOR](https://github.com/chandraokta/CO-CALCULATOR)  
+**Latest release:** [v1.7 — C.O CALCULATOR](https://github.com/chandraokta/CO-CALCULATOR/releases/tag/v1.7)
+
 A new Android scientific calculator with the tactile, physical-instrument feel of a classic
 pocket calculator. The product and interface are original; the feature set and the level of
 realism were informed by RealCalc Scientific Calculator 3.1.1.
