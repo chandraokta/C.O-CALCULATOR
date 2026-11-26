@@ -24,8 +24,8 @@ lalu tombolnya, atau **tahan** tombol tersebut sekitar setengah detik.
 | **Blok angka** | `7 8 9 DEL AC`, `4 5 6 × ÷`, `1 2 3 + −`, `0 ± . EXP =`. |
 | **Legenda kuning** | Fungsi alternatif: `n!`, `nCr`, `nPr`, `DEC`, `HEX`, `π`, `e`, `OCT`, `BIN`, `CONV`, `CNST`, `MOD`, `ANS`, `sin⁻¹`, `cos⁻¹`, `tan⁻¹`, `eˣ`, `10ˣ`, `x³`, `1/x`, `∛`. |
 
-Aplikasi mendukung **portrait** dan **landscape**. Dalam landscape, tombol `SET` membuka
-pengaturan.
+Aplikasi mendukung **portrait** dan **landscape**. Dalam landscape, tombol `MENU`
+membuka pengaturan.
 
 ---
 
@@ -295,7 +295,7 @@ Contoh: hitung `255`, lalu `SHIFT` + `AC`:
 
 ## 12. Pengaturan
 
-Buka dengan tombol `MENU` di baris utilitas (portrait) atau `SET` (landscape).
+Buka dengan tombol `MENU` di baris utilitas, baik portrait maupun landscape.
 
 | Baris | Pilihan |
 |---|---|
@@ -329,9 +329,9 @@ media; suara tombol diputar melalui SoundPool dan tidak bergantung pada pengatur
 
 - Putar perangkat; aplikasi menyesuaikan sendiri.
 - Portrait: 6 kolom fungsi dan 5 kolom angka.
-- Landscape tablet 1920 × 1200: 10 kolom × 5 baris; angka 1–9 tersusun **3×3** di kanan, dengan `0`, `.`, dan `=` di bawahnya.
-- Di landscape, `SET` membuka pengaturan dan `CONV`, `CNST`, `MOD`, `ANS`, `STO`, `DEC`,
-  `HEX`, `OCT`, `BIN` tetap tersedia.
+- Landscape tablet 1920 × 1200: dua panel; tombol fungsi di kiri dan blok angka 5 kolom di kanan. Angka 1–9 tetap tersusun **3×3**, dengan `0`, `.`, dan `=` di bawahnya.
+- Di landscape, `MENU` membuka pengaturan; `CONV`, `CNST`, `MOD`, `ANS`, `STO`, `DEC`,
+  `HEX`, `OCT`, `BIN` tetap tersedia lewat `SHIFT` atau tombol utilitas.
 
 ---
 
@@ -387,6 +387,8 @@ Contoh lain yang sudah diuji:
 - [Desain FigCraft](../design/cokalku-sc100.figcraft)
 - [Screenshot aplikasi](../design/app)
 - [Build script](../app/build.ps1)
+
+
 
 
 

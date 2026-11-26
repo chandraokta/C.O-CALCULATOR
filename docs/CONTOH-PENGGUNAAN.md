@@ -169,7 +169,7 @@ dan `PHYSICS` dapat diganti.
 
 ## 13. Pengaturan
 
-Buka dengan `MENU` (portrait) atau `SET` (landscape).
+Buka dengan `MENU` (portrait maupun landscape).
 
 | Fitur | Pilihan | Contoh |
 |---|---|---|
@@ -203,7 +203,7 @@ Buka dengan `MENU` (portrait) atau `SET` (landscape).
 | Mode | Contoh |
 |---|---|
 | Portrait | 6 kolom fungsi dan 5 kolom angka; `MENU` di baris utilitas |
-| Landscape 1920 × 1200 | 10 kolom × 5 baris; angka 1–9 dalam blok **3×3** di kanan; `SET` membuka pengaturan |
+| Landscape 1920 × 1200 | dua panel: fungsi di kiri, angka 1–9 dalam blok **3×3** dan 5 kolom di kanan; `MENU` membuka pengaturan |
 
 Putar perangkat; konfigurasi dan hasil tidak hilang.
 
@@ -225,6 +225,8 @@ Putar perangkat; konfigurasi dan hasil tidak hilang.
 
 Jika ada hasil yang tidak sesuai, sertakan urutan tombol dan hasil yang muncul saat
 melaporkan masalah.
+
+
 
 
 

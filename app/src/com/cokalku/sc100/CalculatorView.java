@@ -306,40 +306,69 @@ public class CalculatorView extends View {
     }
 
     private void buildLandscapeKeys() {
-        float kx = 44, ky = 164, kw = 827, kh = 42, gap = 6;
-        float cw = (kw - 9 * gap) / 10;
-        String[][] rows = {
-                {"SHIFT", "shift", "1"}, {"DRG", "drg", "0"}, {"FSE", "fse", "0"}, {"MR", "mr", "0"},
-                {"MS", "ms", "0"}, {"M+", "mplus", "0"}, {"hyp", "hyp", "0"}, {"7", "d7", "0"},
-                {"8", "d8", "0"}, {"9", "d9", "0"},
-                {"sin", "sin", "0"}, {"cos", "cos", "0"}, {"tan", "tan", "0"}, {"ln", "ln", "0"},
-                {"log", "log", "0"}, {"π", "pi", "0"}, {"e", "e", "0"}, {"4", "d4", "0"},
-                {"5", "d5", "0"}, {"6", "d6", "0"},
-                {"yˣ", "pow", "0"}, {"√", "sqrt", "0"}, {"x²", "sq", "0"}, {"%", "percent", "0"},
-                {"(", "lparen", "0"}, {")", "rparen", "0"}, {"±", "sign", "0"}, {"1", "d1", "0"},
-                {"2", "d2", "0"}, {"3", "d3", "0"},
-                {"AC", "ac", "2"}, {"DEL", "del", "2"}, {"×", "mul", "0"}, {"÷", "div", "0"},
-                {"+", "add", "0"}, {"−", "sub", "0"}, {"EXP", "exp", "0"}, {"0", "d0", "0"},
-                {".", "dot", "0"}, {"=", "eq", "0"},
-                {"CONV", "conv", "3"}, {"CNST", "cnst", "3"}, {"MOD", "mod", "3"}, {"ANS", "ans", "3"},
-                {"STO", "store", "3"}, {"SET", "menu", "3"}, {"DEC", "dec", "3"}, {"HEX", "hex", "3"},
-                {"OCT", "oct", "3"}, {"BIN", "bin", "3"}
+        float kx = 44, ky = 164, leftW = 438, rightX = 506, rightW = 365, kh = 52, gap = 6;
+        float lcw = (leftW - 5 * gap) / 6;
+        float rcw = (rightW - 4 * gap) / 5;
+
+        // Left: the normal scientific block from the portrait keypad.
+        String[][] left = {
+                {"MENU", null, "menu", null}, {"DRG▸", null, "drg", null}, {"TAB", null, "tab", null},
+                {"RCL", null, "recall", null}, {"STO", null, "store", null}, {"M−", null, "mminus", null},
+                {"SHIFT", null, "shift", null}, {"DRG", null, "drg", null}, {"FSE", null, "fse", null},
+                {"MR", null, "mr", null}, {"MS", null, "ms", null}, {"M+", null, "mplus", null},
+                {"hyp", "hyp⁻¹", "hyp", null}, {"sin", "sin⁻¹", "sin", "asin"}, {"cos", "cos⁻¹", "cos", "acos"},
+                {"tan", "tan⁻¹", "tan", "atan"}, {"ln", "eˣ", "ln", "expf"}, {"log", "10ˣ", "log", "pow10"},
+                {"yˣ", "ˣ√y", "pow", null}, {"√", "∛", "sqrt", "cbrt"}, {"x²", "x³", "sq", "cube"},
+                {"%", "1/x", "percent", "inv"}, {"(", null, "lparen", null}, {")", null, "rparen", null}
         };
-        for (int i = 0; i < rows.length; i++) {
-            int r = i / 10, c = i % 10;
-            String label = rows[i][0];
-            int kind = Integer.parseInt(rows[i][2]);
-            float fs;
-            boolean bold = false;
-            if (kind == 2) { fs = 15; bold = true; }
-            else if (label.equals("SHIFT")) { fs = 10.5f; bold = true; }
-            else if (kind == 3) { fs = 7.6f; }
-            else if (label.equals("×") || label.equals("÷") || label.equals("+") || label.equals("−") || label.equals("±") || label.equals("=")) { fs = 22; }
-            else if (label.equals("EXP")) { fs = 11; bold = true; }
-            else { fs = 19; }
-            addKey(kx + c * (cw + gap), ky + r * (kh + 6), cw, kh, label, null,
-                    rows[i][1], null, kind, fs, bold, false);
+
+        // Right: the familiar 5-column number pad, exactly as in portrait.
+        String[][] right = {
+                {"7", "n!", "d7", "fact"}, {"8", "nCr", "d8", "ncr"}, {"9", "nPr", "d9", "npr"},
+                {"DEL", "DEC", "del", "dec"}, {"AC", "HEX", "ac", "hex"},
+                {"4", "π", "d4", "pi"}, {"5", "e", "d5", "e"}, {"6", "OCT", "d6", "oct"},
+                {"×", "BIN", "mul", "bin"}, {"÷", null, "div", null},
+                {"1", "CONV", "d1", "conv"}, {"2", "CNST", "d2", "cnst"}, {"3", "MOD", "d3", "mod"},
+                {"+", null, "add", null}, {"−", null, "sub", null},
+                {"0", null, "d0", null}, {"±", null, "sign", null}, {".", null, "dot", null},
+                {"EXP", null, "exp", null}, {"=", "ANS", "eq", "ans"}
+        };
+
+        for (int i = 0; i < left.length; i++) {
+            int row = i / 6, col = i % 6;
+            addLandscapeKey(kx + col * (lcw + gap), ky + row * (kh + gap), lcw, kh, left[i], row == 0);
         }
+        for (int i = 0; i < right.length; i++) {
+            int row = i / 5, col = i % 5;
+            addLandscapeKey(rightX + col * (rcw + gap), ky + row * (kh + gap), rcw, kh, right[i], false);
+        }
+    }
+
+    private void addLandscapeKey(float x, float y, float w, float h, String[] k, boolean utility) {
+        String label = k[0];
+        int kind = utility ? 3 : (label.equals("SHIFT") ? 1
+                : (label.equals("DEL") || label.equals("AC")) ? 2 : 0);
+        boolean bold = false;
+        float fs;
+        if (utility) {
+            fs = 9.0f;
+        } else if (kind == 2) {
+            fs = 15f;
+            bold = true;
+        } else if (label.equals("SHIFT")) {
+            fs = 10.5f;
+            bold = true;
+        } else if (label.equals("×") || label.equals("÷") || label.equals("+")
+                || label.equals("−") || label.equals("±") || label.equals("=")) {
+            fs = 22f;
+        } else if (label.equals("EXP")) {
+            fs = 11f;
+            bold = true;
+        } else {
+            fs = 19f;
+        }
+        boolean blue = label.equals("MR") || label.equals("MS") || label.equals("M+");
+        addKey(x, y, w, h, label, k[1], k[2], k[3], kind, fs, bold, blue);
     }
 
     private void buildChrome() {
@@ -1899,7 +1928,7 @@ public class CalculatorView extends View {
                 prefs.clickVolume() + "%",
                 prefs.keepAwake() ? "AKTIF" : "NONAKTIF",
                 "KETUK UNTUK RESET",
-                "SC-100 · 1.8"
+                "SC-100 · 1.9"
         };
         float top = panel.top + ps(74);
         float footer = panel.bottom - ps(14);
@@ -2080,6 +2109,7 @@ public class CalculatorView extends View {
         }
     }
 }
+
 
 
 

@@ -1,7 +1,7 @@
 # C.O CALCULATOR SC-100
 
 **Repository:** [github.com/chandraokta/C.O-CALCULATOR](https://github.com/chandraokta/C.O-CALCULATOR)  
-**Latest release:** [v1.8 — C.O CALCULATOR](https://github.com/chandraokta/C.O-CALCULATOR/releases/tag/v1.8)
+**Latest release:** [v1.9 — C.O CALCULATOR](https://github.com/chandraokta/C.O-CALCULATOR/releases/tag/v1.9)
 
 A new Android scientific calculator with the tactile, physical-instrument feel of a classic
 pocket calculator. The product and interface are original; the feature set and the level of
@@ -23,7 +23,7 @@ These captures are from the actual APK on an Android 11 x86_64 emulator (1080 ×
 | ![Result history](design/app/02-history.png) | ![Unit converter](design/app/03-converter.png) |
 | **Result history** opens from `SHIFT` + `=` (the `ANS` legend). Tap any row to reuse it. | **Unit converter** keeps the current value and converts into every listed unit live. |
 | ![Landscape](design/app/04-landscape.png) | ![Settings](design/app/07-settings.png) |
-| **Landscape 1920 × 1200 tablet:** ten columns with the 1–9 keys in a 3×3 block on the right, plus a `SET` key. | **Pengaturan:** menu Indonesia dengan label besar, getar, dan suara tombol. |
+| **Landscape 1920 × 1200 tablet:** scientific keys on the left and a familiar 5-column number pad on the right. | **Pengaturan:** menu Indonesia dengan label besar, getar, dan suara tombol. |
 
 ![Ukuran layar yang diuji](design/app/06-responsive.png)
 
@@ -51,7 +51,7 @@ Diuji pada 480 × 800, 1080 × 1920, 1080 × 2400, 1600 × 2560 (tablet), 800 ×
 | ![Calculator](design/export/01%20%C2%B7%20Calculator.png) | ![History](design/export/02%20%C2%B7%20Result%20History.png) |
 | **01 — Calculator:** graphite face, inset green LCD, six-column scientific block and five-column number block. | **02 — Result history:** the same instrument dimmed behind a milled metal panel. |
 | ![Converter](design/export/03%20%C2%B7%20Unit%20Converter.png) | ![Landscape](design/export/04%20%C2%B7%20Landscape.png) |
-| **03 — Unit converter:** category chips, from/to cards and live common-unit rows. | **04 — Landscape:** ten-column console layout for wide screens. |
+| **03 — Unit converter:** category chips, from/to cards and live common-unit rows. | **04 — Landscape:** two-panel tablet layout for wide screens. |
 
 ## Panduan penggunaan
 
@@ -163,6 +163,9 @@ Feature and interaction inspiration: [RealCalc Scientific Calculator on Google P
 and the APK supplied in this workspace for study. The seven-segment typeface is
 [DSEG7 Classic](https://github.com/keshikan/DSEG) (SIL Open Font License); its license is
 included at `app/assets/fonts/DSEG-OFL.txt`; the runtime copy is `app/res/raw/dseg.ttf`.
+
+
+
 
 
 

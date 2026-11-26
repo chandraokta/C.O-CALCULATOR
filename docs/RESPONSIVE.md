@@ -36,8 +36,8 @@ Diuji langsung pada emulator Android 11 dengan mengubah `wm size`/`wm density`:
 | 1080 × 1920 | portrait | layout 16:9 pas, teks diperbesar otomatis |
 | 1080 × 2400 | portrait | layout utama 20:9 |
 | 1600 × 2560 | portrait tablet | tombol melebar, teks tetap terbaca |
-| 800 × 480 | landscape | 10 kolom × 5 baris muat |
-| 1920 × 1200 | landscape tablet | layout lebar, tidak ada clipping |
+| 800 × 480 | landscape | dua panel, fungsi kiri dan angka kanan |
+| 1920 × 1200 | landscape tablet | dua panel, angka 3×3, tidak ada clipping |
 
 Overlay juga diuji pada 480 × 800: panel pengaturan dan konverter tetap berada di dalam
 layar dan bisa digunakan.
@@ -54,5 +54,6 @@ dan bitmap chrome — tanpa membuat ulang proses atau kehilangan perhitungan.
 - Layout landscape aktif saat lebar > tinggi × 1,2.
 - Di layar sangat kecil, teks overlay memang kecil, tetapi tidak terpotong; pengaturan
   tetap dapat dibaca dan disentuh.
+
 
 
