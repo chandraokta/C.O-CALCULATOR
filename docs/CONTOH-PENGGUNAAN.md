@@ -203,7 +203,7 @@ Buka dengan `MENU` (portrait) atau `SET` (landscape).
 | Mode | Contoh |
 |---|---|
 | Portrait | 6 kolom fungsi dan 5 kolom angka; `MENU` di baris utilitas |
-| Landscape | 10 kolom × 5 baris; `SET` membuka pengaturan; semua fungsi tetap tersedia |
+| Landscape | 10 kolom × 5 baris; angka 1–9 dalam blok **3×3** di kanan; `SET` membuka pengaturan |
 
 Putar perangkat; konfigurasi dan hasil tidak hilang.
 
@@ -225,6 +225,7 @@ Putar perangkat; konfigurasi dan hasil tidak hilang.
 
 Jika ada hasil yang tidak sesuai, sertakan urutan tombol dan hasil yang muncul saat
 melaporkan masalah.
+
 
 
 

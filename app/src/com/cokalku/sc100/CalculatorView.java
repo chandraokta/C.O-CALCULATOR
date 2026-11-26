@@ -310,17 +310,17 @@ public class CalculatorView extends View {
         float cw = (kw - 9 * gap) / 10;
         String[][] rows = {
                 {"SHIFT", "shift", "1"}, {"DRG", "drg", "0"}, {"FSE", "fse", "0"}, {"MR", "mr", "0"},
-                {"MS", "ms", "0"}, {"M+", "mplus", "0"}, {"hyp", "hyp", "0"}, {"sin", "sin", "0"},
-                {"cos", "cos", "0"}, {"tan", "tan", "0"},
+                {"MS", "ms", "0"}, {"M+", "mplus", "0"}, {"hyp", "hyp", "0"}, {"7", "d7", "0"},
+                {"8", "d8", "0"}, {"9", "d9", "0"},
+                {"sin", "sin", "0"}, {"cos", "cos", "0"}, {"tan", "tan", "0"}, {"ln", "ln", "0"},
+                {"log", "log", "0"}, {"π", "pi", "0"}, {"e", "e", "0"}, {"4", "d4", "0"},
+                {"5", "d5", "0"}, {"6", "d6", "0"},
                 {"yˣ", "pow", "0"}, {"√", "sqrt", "0"}, {"x²", "sq", "0"}, {"%", "percent", "0"},
-                {"(", "lparen", "0"}, {")", "rparen", "0"}, {"ln", "ln", "0"}, {"log", "log", "0"},
-                {"π", "pi", "0"}, {"e", "e", "0"},
-                {"7", "d7", "0"}, {"8", "d8", "0"}, {"9", "d9", "0"}, {"DEL", "del", "2"},
-                {"AC", "ac", "2"}, {"4", "d4", "0"}, {"5", "d5", "0"}, {"6", "d6", "0"},
-                {"×", "mul", "0"}, {"÷", "div", "0"},
-                {"1", "d1", "0"}, {"2", "d2", "0"}, {"3", "d3", "0"}, {"+", "add", "0"},
-                {"−", "sub", "0"}, {"0", "d0", "0"}, {"±", "sign", "0"}, {".", "dot", "0"},
-                {"EXP", "exp", "0"}, {"=", "eq", "0"},
+                {"(", "lparen", "0"}, {")", "rparen", "0"}, {"±", "sign", "0"}, {"1", "d1", "0"},
+                {"2", "d2", "0"}, {"3", "d3", "0"},
+                {"AC", "ac", "2"}, {"DEL", "del", "2"}, {"×", "mul", "0"}, {"÷", "div", "0"},
+                {"+", "add", "0"}, {"−", "sub", "0"}, {"EXP", "exp", "0"}, {"0", "d0", "0"},
+                {".", "dot", "0"}, {"=", "eq", "0"},
                 {"CONV", "conv", "3"}, {"CNST", "cnst", "3"}, {"MOD", "mod", "3"}, {"ANS", "ans", "3"},
                 {"STO", "store", "3"}, {"SET", "menu", "3"}, {"DEC", "dec", "3"}, {"HEX", "hex", "3"},
                 {"OCT", "oct", "3"}, {"BIN", "bin", "3"}
@@ -1899,7 +1899,7 @@ public class CalculatorView extends View {
                 prefs.clickVolume() + "%",
                 prefs.keepAwake() ? "AKTIF" : "NONAKTIF",
                 "KETUK UNTUK RESET",
-                "SC-100 · 1.7"
+                "SC-100 · 1.8"
         };
         float top = panel.top + ps(74);
         float footer = panel.bottom - ps(14);
@@ -2080,6 +2080,7 @@ public class CalculatorView extends View {
         }
     }
 }
+
 
 
 

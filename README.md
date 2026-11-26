@@ -1,7 +1,7 @@
 # C.O CALCULATOR SC-100
 
 **Repository:** [github.com/chandraokta/C.O-CALCULATOR](https://github.com/chandraokta/C.O-CALCULATOR)  
-**Latest release:** [v1.7 — C.O CALCULATOR](https://github.com/chandraokta/C.O-CALCULATOR/releases/tag/v1.7)
+**Latest release:** [v1.8 — C.O CALCULATOR](https://github.com/chandraokta/C.O-CALCULATOR/releases/tag/v1.8)
 
 A new Android scientific calculator with the tactile, physical-instrument feel of a classic
 pocket calculator. The product and interface are original; the feature set and the level of
@@ -23,7 +23,7 @@ These captures are from the actual APK on an Android 11 x86_64 emulator (1080 ×
 | ![Result history](design/app/02-history.png) | ![Unit converter](design/app/03-converter.png) |
 | **Result history** opens from `SHIFT` + `=` (the `ANS` legend). Tap any row to reuse it. | **Unit converter** keeps the current value and converts into every listed unit live. |
 | ![Landscape](design/app/04-landscape.png) | ![Settings](design/app/07-settings.png) |
-| **Landscape console:** ten columns, all scientific functions and a `SET` key. | **Pengaturan:** menu Indonesia dengan label besar, getar, dan suara tombol. |
+| **Landscape console:** ten columns with the 1–9 keys in a 3×3 block on the right, plus a `SET` key. | **Pengaturan:** menu Indonesia dengan label besar, getar, dan suara tombol. |
 
 ![Ukuran layar yang diuji](design/app/06-responsive.png)
 
@@ -163,6 +163,8 @@ Feature and interaction inspiration: [RealCalc Scientific Calculator on Google P
 and the APK supplied in this workspace for study. The seven-segment typeface is
 [DSEG7 Classic](https://github.com/keshikan/DSEG) (SIL Open Font License); its license is
 included at `app/assets/fonts/DSEG-OFL.txt`; the runtime copy is `app/res/raw/dseg.ttf`.
+
+
 
 
 
