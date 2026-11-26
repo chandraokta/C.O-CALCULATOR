@@ -329,7 +329,7 @@ media; suara tombol diputar melalui SoundPool dan tidak bergantung pada pengatur
 
 - Putar perangkat; aplikasi menyesuaikan sendiri.
 - Portrait: 6 kolom fungsi dan 5 kolom angka.
-- Landscape: 10 kolom × 5 baris; angka 1–9 tersusun **3×3** di kanan, dengan `0`, `.`, dan `=` di bawahnya.
+- Landscape tablet 1920 × 1200: 10 kolom × 5 baris; angka 1–9 tersusun **3×3** di kanan, dengan `0`, `.`, dan `=` di bawahnya.
 - Di landscape, `SET` membuka pengaturan dan `CONV`, `CNST`, `MOD`, `ANS`, `STO`, `DEC`,
   `HEX`, `OCT`, `BIN` tetap tersedia.
 
@@ -387,6 +387,7 @@ Contoh lain yang sudah diuji:
 - [Desain FigCraft](../design/cokalku-sc100.figcraft)
 - [Screenshot aplikasi](../design/app)
 - [Build script](../app/build.ps1)
+
 
 
 
