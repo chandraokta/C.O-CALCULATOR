@@ -60,6 +60,18 @@ Urutan tombol ditulis dengan tanda `→`. Hasil memakai desimal koma (default).
 | Kebalikan | `4` `SHIFT` `%` `=` | 0,25 |
 | Pangkat pecahan | `2` `7` `yˣ` `(` `1` `÷` `3` `)` `=` | 3 |
 
+## 4b. Pecahan
+
+Tombol pecahan adalah `SHIFT` + `÷` (legend `a b/c`).
+
+| Fitur | Urutan tombol | Hasil |
+|---|---|---|
+| Setengah | `1` `SHIFT` `÷` `2` `=` | 1/2 |
+| Tiga per empat | `3` `SHIFT` `÷` `4` `=` | 3/4 |
+| Pecahan campuran | `5` `SHIFT` `÷` `2` `=` | 2 1/2 |
+| Campuran dari penjumlahan | `2` `+` `1` `SHIFT` `÷` `2` `=` | 2 1/2 |
+| Pecahan kompleks | `(` `1` `+` `2` `)` `SHIFT` `÷` `(` `3` `+` `4` `)` `=` | 3/7 |
+
 ## 5. Faktorial, kombinasi, permutasi, modulus
 
 | Fitur | Urutan tombol | Hasil |
@@ -227,6 +239,7 @@ Putar perangkat; konfigurasi dan hasil tidak hilang.
 
 Jika ada hasil yang tidak sesuai, sertakan urutan tombol dan hasil yang muncul saat
 melaporkan masalah.
+
 
 
 

@@ -66,6 +66,7 @@ public class CalculatorView extends View {
     private Vibrator vibrator;
     private boolean resultRecorded;
     private String displayOverride;
+    private boolean fractionMode;
 
     private Bitmap chrome;
     private int W, H;
@@ -283,7 +284,7 @@ public class CalculatorView extends View {
                 {"7", "n!", "d7", "fact"}, {"8", "nCr", "d8", "ncr"}, {"9", "nPr", "d9", "npr"},
                 {"DEL", "DEC", "del", "dec"}, {"AC", "HEX", "ac", "hex"},
                 {"4", "π", "d4", "pi"}, {"5", "e", "d5", "e"}, {"6", "OCT", "d6", "oct"},
-                {"×", "BIN", "mul", "bin"}, {"÷", null, "div", null},
+                {"×", "BIN", "mul", "bin"}, {"÷", "a b/c", "div", "frac"},
                 {"1", "CONV", "d1", "conv"}, {"2", "CNST", "d2", "cnst"}, {"3", "MOD", "d3", "mod"},
                 {"+", null, "add", null}, {"−", null, "sub", null},
                 {"0", null, "d0", null}, {"±", null, "sign", null}, {".", null, "dot", null},
@@ -327,7 +328,7 @@ public class CalculatorView extends View {
                 {"7", "n!", "d7", "fact"}, {"8", "nCr", "d8", "ncr"}, {"9", "nPr", "d9", "npr"},
                 {"DEL", "DEC", "del", "dec"}, {"AC", "HEX", "ac", "hex"},
                 {"4", "π", "d4", "pi"}, {"5", "e", "d5", "e"}, {"6", "OCT", "d6", "oct"},
-                {"×", "BIN", "mul", "bin"}, {"÷", null, "div", null},
+                {"×", "BIN", "mul", "bin"}, {"÷", "a b/c", "div", "frac"},
                 {"1", "CONV", "d1", "conv"}, {"2", "CNST", "d2", "cnst"}, {"3", "MOD", "d3", "mod"},
                 {"+", null, "add", null}, {"−", null, "sub", null},
                 {"0", null, "d0", null}, {"±", null, "sign", null}, {".", null, "dot", null},
@@ -728,6 +729,13 @@ public class CalculatorView extends View {
             text(canvas, "Error", right - ps(15), baseline, ps(26), theme.lcdInk, boldFace, Paint.Align.RIGHT);
             return;
         }
+        if (justEvaluated && fractionMode) {
+            String fraction = FractionUtil.toMixed(lastResult);
+            if (fraction != null) {
+                drawFraction(canvas, fraction, right - ps(15), baseline);
+                return;
+            }
+        }
         Formatter.Display d = Formatter.split(value);
         float maxRight = right - ps(13);
         float startSize = ps(landscape ? 40 : 54);
@@ -741,6 +749,22 @@ public class CalculatorView extends View {
         } else {
             drawMantissa(canvas, d.mantissa, maxRight, baseline, lcdScreen.width() - ps(26), startSize, minSize);
         }
+    }
+
+    private void drawFraction(Canvas c, String s, float right, float baseline) {
+        textPaint.reset();
+        textPaint.setAntiAlias(true);
+        textPaint.setTypeface(boldFace);
+        textPaint.setColor(theme.lcdInk);
+        textPaint.setTextAlign(Paint.Align.RIGHT);
+        float size = ps(landscape ? 34 : 44);
+        textPaint.setTextSize(size);
+        float maxW = lcdScreen.width() - ps(30);
+        while (size > ps(16) && textPaint.measureText(s) > maxW) {
+            size -= ps(1);
+            textPaint.setTextSize(size);
+        }
+        c.drawText(s, right, baseline, textPaint);
     }
 
     private void drawMantissa(Canvas c, String s, float right, float baseline, float maxW, float start, float min) {
@@ -928,6 +952,7 @@ public class CalculatorView extends View {
         expr = ""; lastExpr = ""; errorState = false; justEvaluated = false;
         lastResult = BigDecimal.ZERO;
         resultRecorded = false;
+        fractionMode = false;
         shift = false; hyp = false;
         invalidate();
     }
@@ -1034,6 +1059,21 @@ public class CalculatorView extends View {
         invalidate();
     }
 
+    /** Fraction key: numerator, a b/c, denominator, =. */
+    private void insertFraction() {
+        errorState = false;
+        if (justEvaluated) {
+            expr = lastResult.stripTrailingZeros().toPlainString() + "/";
+            justEvaluated = false;
+        } else if (expr.isEmpty() || expr.endsWith("(") || isOp(lastChar().charAt(0))) {
+            expr += "1/";
+        } else if (!expr.endsWith("/")) {
+            expr += "/";
+        }
+        fractionMode = true;
+        invalidate();
+    }
+
     private void memoryStore(int index, boolean add) {
         double v = currentDouble();
         if (add) memories[index] += v;
@@ -1071,6 +1111,7 @@ public class CalculatorView extends View {
             case "mul": appendOperator("×"); break;
             case "div": appendOperator("÷"); break;
             case "pow": appendOperator("^"); break;
+            case "frac": insertFraction(); break;
             case "nroot": appendOperator("^"); insert("(1/"); break;
             case "lparen": insert("("); break;
             case "rparen": insert(")"); break;
@@ -1938,7 +1979,7 @@ public class CalculatorView extends View {
                 prefs.clickVolume() + "%",
                 en ? (prefs.keepAwake() ? "ON" : "OFF") : (prefs.keepAwake() ? "AKTIF" : "NONAKTIF"),
                 en ? "TOUCH TO RESET" : "KETUK UNTUK RESET",
-                "SC-100 · 2.1"
+                "SC-100 · 2.2"
         };
         float top = panel.top + ps(74);
         float footer = panel.bottom - ps(14);
@@ -2129,6 +2170,10 @@ public class CalculatorView extends View {
         }
     }
 }
+
+
+
+
 
 
 

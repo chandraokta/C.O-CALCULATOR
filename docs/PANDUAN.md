@@ -163,6 +163,21 @@ Kurung tutup tidak perlu diketik; aplikasi menutupnya otomatis saat `=`.
 Catatan: `n!`, `nCr`, dan `nPr` membutuhkan bilangan bulat. `mod` juga menerima desimal;
 hasilnya mengikuti tanda pembagi, contoh `−8 mod 5 = 2` dan `8 mod −5 = −2`.
 
+### Pecahan
+
+Tombol pecahan adalah `SHIFT` + `÷` (legenda kuning `a b/c`).
+
+| Perhitungan | Urutan tombol | Hasil |
+|---|---|---|
+| Setengah | `1` `SHIFT` `÷` `2` `=` | 1/2 |
+| Tiga per empat | `3` `SHIFT` `÷` `4` `=` | 3/4 |
+| Lima per dua | `5` `SHIFT` `÷` `2` `=` | 2 1/2 |
+| Campuran | `2` `+` `1` `SHIFT` `÷` `2` `=` | 2 1/2 |
+| Pecahan dalam kurung | `(` `1` `+` `2` `)` `SHIFT` `÷` `(` `3` `+` `4` `)` `=` | 3/7 |
+
+Hasil pecahan ditampilkan dalam bentuk campuran. Jika hasilnya bukan pecahan rasional
+sederhana, LCD kembali menampilkan desimal.
+
 ---
 
 ## 6. Logaritma, eksponensial, dan konstanta
@@ -375,7 +390,7 @@ Contoh lain yang sudah diuji:
 ## 16. Batasan versi ini
 
 - Belum ada mode **RPN**.
-- Belum ada pecahan, derajat–menit–detik, dan widget homescreen.
+- Pecahan tersedia lewat `SHIFT` + `÷`; derajat–menit–detik dan widget homescreen belum ada.
 - Radix hanya penampil konversi, belum aritmetika per basis.
 - Belum ada copy/paste dari LCD.
 - Build ini memakai **debug signing**; untuk distribusi Play Store perlu keystore rilis.
@@ -389,6 +404,7 @@ Contoh lain yang sudah diuji:
 - [Desain FigCraft](../design/cokalku-sc100.figcraft)
 - [Screenshot aplikasi](../design/app)
 - [Build script](../app/build.ps1)
+
 
 
 
