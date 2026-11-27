@@ -250,7 +250,7 @@ public class CalculatorView extends View {
         }
 
         Object[][] row2 = {
-                {"hyp", "hyp⁻¹", "hyp", null, 0, 16f, false, false},
+                {"hyp", null, "hyp", null, 0, 16f, false, false},
                 {"sin", "sin⁻¹", "sin", "asin", 0, 19f, false, false},
                 {"cos", "cos⁻¹", "cos", "acos", 0, 19f, false, false},
                 {"tan", "tan⁻¹", "tan", "atan", 0, 19f, false, false},
@@ -264,7 +264,7 @@ public class CalculatorView extends View {
         }
 
         Object[][] row3 = {
-                {"yˣ", "ˣ√y", "pow", null, 0, 19f, false, false},
+                {"yˣ", "ˣ√y", "pow", "nroot", 0, 19f, false, false},
                 {"√", "∛", "sqrt", "cbrt", 0, 22f, false, false},
                 {"x²", "x³", "sq", "cube", 0, 18f, false, false},
                 {"%", "1/x", "percent", "inv", 0, 20f, false, false},
@@ -316,9 +316,9 @@ public class CalculatorView extends View {
                 {"RCL", null, "recall", null}, {"STO", null, "store", null}, {"M−", null, "mminus", null},
                 {"SHIFT", null, "shift", null}, {"DRG", null, "drg", null}, {"FSE", null, "fse", null},
                 {"MR", null, "mr", null}, {"MS", null, "ms", null}, {"M+", null, "mplus", null},
-                {"hyp", "hyp⁻¹", "hyp", null}, {"sin", "sin⁻¹", "sin", "asin"}, {"cos", "cos⁻¹", "cos", "acos"},
+                {"hyp", null, "hyp", null}, {"sin", "sin⁻¹", "sin", "asin"}, {"cos", "cos⁻¹", "cos", "acos"},
                 {"tan", "tan⁻¹", "tan", "atan"}, {"ln", "eˣ", "ln", "expf"}, {"log", "10ˣ", "log", "pow10"},
-                {"yˣ", "ˣ√y", "pow", null}, {"√", "∛", "sqrt", "cbrt"}, {"x²", "x³", "sq", "cube"},
+                {"yˣ", "ˣ√y", "pow", "nroot"}, {"√", "∛", "sqrt", "cbrt"}, {"x²", "x³", "sq", "cube"},
                 {"%", "1/x", "percent", "inv"}, {"(", null, "lparen", null}, {")", null, "rparen", null}
         };
 
@@ -1071,6 +1071,7 @@ public class CalculatorView extends View {
             case "mul": appendOperator("×"); break;
             case "div": appendOperator("÷"); break;
             case "pow": appendOperator("^"); break;
+            case "nroot": appendOperator("^"); insert("(1/"); break;
             case "lparen": insert("("); break;
             case "rparen": insert(")"); break;
             case "percent": insert("%"); break;
@@ -1937,7 +1938,7 @@ public class CalculatorView extends View {
                 prefs.clickVolume() + "%",
                 en ? (prefs.keepAwake() ? "ON" : "OFF") : (prefs.keepAwake() ? "AKTIF" : "NONAKTIF"),
                 en ? "TOUCH TO RESET" : "KETUK UNTUK RESET",
-                "SC-100 · 2.0"
+                "SC-100 · 2.1"
         };
         float top = panel.top + ps(74);
         float footer = panel.bottom - ps(14);
@@ -2128,6 +2129,9 @@ public class CalculatorView extends View {
         }
     }
 }
+
+
+
 
 
 

@@ -54,6 +54,7 @@ Urutan tombol ditulis dengan tanda `→`. Hasil memakai desimal koma (default).
 | Pangkat | `2` `yˣ` `1` `0` `=` | 1.024 |
 | Akar kuadrat | `√` `1` `4` `4` `=` | 12 |
 | Akar kubik | `SHIFT` `√` `2` `7` `=` | 3 |
+| Akar pangkat-n | `8` `SHIFT` `yˣ` `3` `=` | 2 |
 | Kuadrat | `1` `2` `x²` `=` | 144 |
 | Kubik | `5` `SHIFT` `x²` `=` | 125 |
 | Kebalikan | `4` `SHIFT` `%` `=` | 0,25 |
@@ -226,6 +227,7 @@ Putar perangkat; konfigurasi dan hasil tidak hilang.
 
 Jika ada hasil yang tidak sesuai, sertakan urutan tombol dan hasil yang muncul saat
 melaporkan masalah.
+
 
 
 

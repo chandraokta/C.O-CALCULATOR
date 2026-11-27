@@ -150,6 +150,7 @@ Kurung tutup tidak perlu diketik; aplikasi menutupnya otomatis saat `=`.
 | 2 pangkat 10 | `2` `yˣ` `10` `=` | 1024 |
 | Akar 144 | `√` `144` `=` | 12 |
 | Akar kubik 27 | `SHIFT` `√` `27` `=` | 3 |
+| Akar pangkat-n | `8` `SHIFT` `yˣ` `3` `=` | 2 |
 | 12 kuadrat | `12` `x²` `=` | 144 |
 | 5 kubik | `5` `SHIFT` `x²` `=` | 125 |
 | 4 faktorial | `4` `SHIFT` `7` `=` | 24 |
@@ -388,6 +389,7 @@ Contoh lain yang sudah diuji:
 - [Desain FigCraft](../design/cokalku-sc100.figcraft)
 - [Screenshot aplikasi](../design/app)
 - [Build script](../app/build.ps1)
+
 
 
 
