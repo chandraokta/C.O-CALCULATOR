@@ -44,6 +44,10 @@ public final class Prefs {
     public boolean grouping() { return sp.getBoolean("grouping", true); }
     public void setGrouping(boolean v) { sp.edit().putBoolean("grouping", v).apply(); }
 
+    /** true = English Settings labels; false = Indonesian. Other screens stay English. */
+    public boolean settingsEnglish() { return sp.getBoolean("settingsEnglish", false); }
+    public void setSettingsEnglish(boolean v) { sp.edit().putBoolean("settingsEnglish", v).apply(); }
+
     /** true = decimal comma (0,5); false = decimal dot (0.5). Default comma. */
     public boolean decimalComma() { return sp.getBoolean("decimalComma", true); }
     public void setDecimalComma(boolean v) { sp.edit().putBoolean("decimalComma", v).apply(); }
@@ -115,6 +119,7 @@ public final class Prefs {
 
     public void clearHistory() { sp.edit().putString("history", "[]").apply(); }
 }
+
 
 
 

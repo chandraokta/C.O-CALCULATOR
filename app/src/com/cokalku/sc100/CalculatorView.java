@@ -1910,25 +1910,34 @@ public class CalculatorView extends View {
     }
 
     private void drawSettings(Canvas c) {
-        setupPanel(c, "PENGATURAN", "PREFERENSI ALAT", 0.86f, 0.88f);
-        String[] labels = {"Tema", "Mode sudut", "Format angka", "Tanda desimal", "Jumlah digit", "Pemisah ribuan",
-                "Getar", "Kekuatan getar", "Tes getar", "Suara tombol", "Volume klik", "Layar tetap menyala",
-                "Reset alat", "Tentang C.O CALCULATOR"};
+        boolean en = prefs.settingsEnglish();
+        setupPanel(c, en ? "SETTINGS" : "PENGATURAN",
+                en ? "INSTRUMENT PREFERENCES" : "PREFERENSI ALAT", 0.86f, 0.90f);
+        String[] labels = en
+                ? new String[]{"Language", "Theme", "Angle mode", "Number format", "Decimal mark",
+                "Digits", "Grouping", "Vibration", "Vibration strength", "Test vibration",
+                "Key sound", "Click volume", "Keep awake", "Reset instrument", "About C.O CALCULATOR"}
+                : new String[]{"Bahasa", "Tema", "Mode sudut", "Format angka", "Tanda desimal",
+                "Jumlah digit", "Pemisah ribuan", "Getar", "Kekuatan getar", "Tes getar",
+                "Suara tombol", "Volume klik", "Layar tetap menyala", "Reset alat", "Tentang C.O CALCULATOR"};
         String[] values = {
-                prefs.theme() == 0 ? "GRAFIT" : prefs.theme() == 1 ? "PERAK" : "TENGAH MALAM",
-                prefs.angle() == 0 ? "DERAJAT" : prefs.angle() == 1 ? "RADIAN" : "GRADIAN",
+                en ? "ENGLISH" : "INDONESIA",
+                en ? (prefs.theme() == 0 ? "GRAPHITE" : prefs.theme() == 1 ? "SILVER" : "MIDNIGHT")
+                        : (prefs.theme() == 0 ? "GRAFIT" : prefs.theme() == 1 ? "PERAK" : "TENGAH MALAM"),
+                en ? (prefs.angle() == 0 ? "DEGREES" : prefs.angle() == 1 ? "RADIANS" : "GRADS")
+                        : (prefs.angle() == 0 ? "DERAJAT" : prefs.angle() == 1 ? "RADIAN" : "GRADIAN"),
                 prefs.format() == 0 ? "AUTO" : prefs.format() == 1 ? "FIX" : prefs.format() == 2 ? "SCI" : "ENG",
-                prefs.decimalComma() ? "KOMA" : "TITIK",
+                en ? (prefs.decimalComma() ? "COMMA" : "DOT") : (prefs.decimalComma() ? "KOMA" : "TITIK"),
                 String.valueOf(prefs.decimals()),
-                prefs.grouping() ? "AKTIF" : "NONAKTIF",
-                prefs.haptics() ? "AKTIF" : "NONAKTIF",
+                en ? (prefs.grouping() ? "ON" : "OFF") : (prefs.grouping() ? "AKTIF" : "NONAKTIF"),
+                en ? (prefs.haptics() ? "ON" : "OFF") : (prefs.haptics() ? "AKTIF" : "NONAKTIF"),
                 prefs.hapticIntensity() + "%",
-                "KETUK UNTUK TES",
-                prefs.sound() ? "AKTIF" : "NONAKTIF",
+                en ? "TOUCH TO TEST" : "KETUK UNTUK TES",
+                en ? (prefs.sound() ? "ON" : "OFF") : (prefs.sound() ? "AKTIF" : "NONAKTIF"),
                 prefs.clickVolume() + "%",
-                prefs.keepAwake() ? "AKTIF" : "NONAKTIF",
-                "KETUK UNTUK RESET",
-                "SC-100 · 1.9"
+                en ? (prefs.keepAwake() ? "ON" : "OFF") : (prefs.keepAwake() ? "AKTIF" : "NONAKTIF"),
+                en ? "TOUCH TO RESET" : "KETUK UNTUK RESET",
+                "SC-100 · 2.0"
         };
         float top = panel.top + ps(74);
         float footer = panel.bottom - ps(14);
@@ -1938,7 +1947,7 @@ public class CalculatorView extends View {
             if (i % 2 == 0) card(c, new RectF(panel.left + ps(8), y, panel.right - ps(8), y + rowH - ps(2)), 0x06FFFFFF, 0, ps(5), false);
             text(c, labels[i], panel.left + ps(18), y + rowH * 0.60f, ps(11.0f), 0xFFDCDCE3, medium, Paint.Align.LEFT);
             text(c, values[i], panel.right - ps(20), y + rowH * 0.60f, ps(9.5f),
-                    i == 12 ? 0xFFE7A0A0 : 0xFFA99BFF, boldFace, Paint.Align.RIGHT);
+                    i == 0 ? 0xFFD9B64B : i == 13 ? 0xFFE7A0A0 : 0xFFA99BFF, boldFace, Paint.Align.RIGHT);
             c.drawLine(panel.left + ps(18), y + rowH - ps(1), panel.right - ps(18), y + rowH - ps(1), linePaint(0x14FFFFFF, 0.6f));
         }
     }
@@ -1946,72 +1955,77 @@ public class CalculatorView extends View {
     private boolean settingsTouch(float x, float y) {
         float top = panel.top + ps(74);
         float footer = panel.bottom - ps(14);
-        int n = 14;
+        int n = 15;
         float rowH = (footer - top) / n;
         int idx = (int) ((y - top) / rowH);
         if (idx < 0 || idx >= n) return true;
         switch (idx) {
             case 0:
+                prefs.setSettingsEnglish(!prefs.settingsEnglish());
+                break;
+            case 1:
                 prefs.setTheme((prefs.theme() + 1) % 3);
                 theme = Theme.byIndex(prefs.theme());
                 buildChrome();
                 break;
-            case 1: prefs.setAngle((prefs.angle() + 1) % 3); break;
-            case 2: prefs.setFormat((prefs.format() + 1) % 4); break;
-            case 3:
+            case 2: prefs.setAngle((prefs.angle() + 1) % 3); break;
+            case 3: prefs.setFormat((prefs.format() + 1) % 4); break;
+            case 4:
                 prefs.setDecimalComma(!prefs.decimalComma());
-                toast(prefs.decimalComma() ? "Desimal: koma (0,5)" : "Desimal: titik (0.5)");
+                toast(prefs.decimalComma()
+                        ? s("Desimal: koma (0,5)", "Decimal: comma (0,5)")
+                        : s("Desimal: titik (0.5)", "Decimal: dot (0.5)"));
                 break;
-            case 4: prefs.setDecimals(nextDecimals()); break;
-            case 5: prefs.setGrouping(!prefs.grouping()); break;
-            case 6: {
+            case 5: prefs.setDecimals(nextDecimals()); break;
+            case 6: prefs.setGrouping(!prefs.grouping()); break;
+            case 7: {
                 boolean on = !prefs.haptics();
                 prefs.setHaptics(on);
                 if (on) {
                     if (vibrator == null || !vibrator.hasVibrator()) {
-                        toast("Motor getar tidak terdeteksi di perangkat ini");
+                        toast(s("Motor getar tidak terdeteksi di perangkat ini", "No vibration motor detected on this device"));
                     } else {
                         vibrateTest();
-                        toast("Getar aktif — tes pola 1,5 detik");
+                        toast(s("Getar aktif — tes pola 1,5 detik", "Vibration on — 1.5-second test pattern"));
                     }
                 } else {
-                    toast("Getar dimatikan");
+                    toast(s("Getar dimatikan", "Vibration off"));
                 }
-                break;
-            }
-            case 7: {
-                int v = nextHapticIntensity();
-                prefs.setHapticIntensity(v);
-                if (prefs.haptics()) vibrateTest();
-                toast("Kekuatan getar: " + v + "%");
                 break;
             }
             case 8: {
-                if (vibrator == null || !vibrator.hasVibrator()) {
-                    toast("Motor getar tidak terdeteksi di perangkat ini");
-                } else {
-                    if (!prefs.haptics()) prefs.setHaptics(true);
-                    vibrateTest();
-                    toast("Tes getar dikirim — pola 1,5 detik");
-                }
+                int v = nextHapticIntensity();
+                prefs.setHapticIntensity(v);
+                if (prefs.haptics()) vibrateTest();
+                toast(s("Kekuatan getar: ", "Vibration strength: ") + v + "%");
                 break;
             }
             case 9: {
-                boolean on = !prefs.sound();
-                prefs.setSound(on);
-                if (on) playClick();
-                toast(on ? "Suara tombol aktif" : "Suara tombol dimatikan");
+                if (vibrator == null || !vibrator.hasVibrator()) {
+                    toast(s("Motor getar tidak terdeteksi di perangkat ini", "No vibration motor detected on this device"));
+                } else {
+                    if (!prefs.haptics()) prefs.setHaptics(true);
+                    vibrateTest();
+                    toast(s("Tes getar dikirim — pola 1,5 detik", "Vibration test sent — 1.5-second pattern"));
+                }
                 break;
             }
             case 10: {
+                boolean on = !prefs.sound();
+                prefs.setSound(on);
+                if (on) playClick();
+                toast(on ? s("Suara tombol aktif", "Key sound on") : s("Suara tombol dimatikan", "Key sound off"));
+                break;
+            }
+            case 11: {
                 int v = nextClickVolume();
                 prefs.setClickVolume(v);
                 if (prefs.sound()) playClick();
-                toast("Volume klik: " + v + "%");
+                toast(s("Volume klik: ", "Click volume: ") + v + "%");
                 break;
             }
-            case 11: prefs.setKeepAwake(!prefs.keepAwake()); setKeepScreenOn(prefs.keepAwake()); break;
-            case 12:
+            case 12: prefs.setKeepAwake(!prefs.keepAwake()); setKeepScreenOn(prefs.keepAwake()); break;
+            case 13:
                 clearAll();
                 memories = new double[10];
                 prefs.clearMemories();
@@ -2025,13 +2039,18 @@ public class CalculatorView extends View {
                 theme = Theme.byIndex(0);
                 buildChrome();
                 break;
-            case 13:
-                toast("C.O CALCULATOR SC-100 · kalkulator ilmiah presisi");
+            case 14:
+                toast(s("C.O CALCULATOR SC-100 · kalkulator ilmiah presisi",
+                        "C.O CALCULATOR SC-100 · a precision scientific calculator"));
                 break;
             default: break;
         }
         invalidate();
         return true;
+    }
+
+    private String s(String id, String en) {
+        return prefs.settingsEnglish() ? en : id;
     }
 
     private int nextHapticIntensity() {
@@ -2109,6 +2128,9 @@ public class CalculatorView extends View {
         }
     }
 }
+
+
+
 
 
 

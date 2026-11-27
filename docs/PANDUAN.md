@@ -299,6 +299,7 @@ Buka dengan tombol `MENU` di baris utilitas, baik portrait maupun landscape.
 
 | Baris | Pilihan |
 |---|---|
+| **Bahasa / Language** | INDONESIA / ENGLISH — default INDONESIA; hanya mengubah bahasa menu Pengaturan |
 | **Tema** | GRAFIT, PERAK, TENGAH MALAM |
 | **Mode sudut** | DERAJAT, RADIAN, GRADIAN |
 | **Format angka** | AUTO, FIX, SCI, ENG |
@@ -387,6 +388,7 @@ Contoh lain yang sudah diuji:
 - [Desain FigCraft](../design/cokalku-sc100.figcraft)
 - [Screenshot aplikasi](../design/app)
 - [Build script](../app/build.ps1)
+
 
 
 

@@ -1,7 +1,7 @@
 # C.O CALCULATOR SC-100
 
 **Repository:** [github.com/chandraokta/C.O-CALCULATOR](https://github.com/chandraokta/C.O-CALCULATOR)  
-**Latest release:** [v1.9 — C.O CALCULATOR](https://github.com/chandraokta/C.O-CALCULATOR/releases/tag/v1.9)
+**Latest release:** [v2.0 — C.O CALCULATOR](https://github.com/chandraokta/C.O-CALCULATOR/releases/tag/v2.0)
 
 A new Android scientific calculator with the tactile, physical-instrument feel of a classic
 pocket calculator. The product and interface are original; the feature set and the level of
@@ -86,7 +86,7 @@ Panduan lengkap semua tombol, fitur, dan contoh perhitungan ada di
   strength and click volume (defaults: vibration on, strength 100%, sound on, volume 30%).
 - **Decimal mark:** comma by default (`0,001`), with a dot option (`0.001`).
 - **Press feedback:** every key flashes darker while pressed and fades back.
-- **Language:** calculator interface is English; the Settings menu is fully Indonesian.
+- **Settings language:** switch the Settings menu between Indonesian and English; the calculator interface remains English.
 - **Vibration test:** a dedicated Settings row sends a 1.5-second pattern and reports if no motor is detected.
 - **Portrait and landscape** layouts, immersive full-screen, keep-awake.
 - **32-digit internal arithmetic** using `BigDecimal` (DECIMAL128) for the four basic
@@ -163,6 +163,8 @@ Feature and interaction inspiration: [RealCalc Scientific Calculator on Google P
 and the APK supplied in this workspace for study. The seven-segment typeface is
 [DSEG7 Classic](https://github.com/keshikan/DSEG) (SIL Open Font License); its license is
 included at `app/assets/fonts/DSEG-OFL.txt`; the runtime copy is `app/res/raw/dseg.ttf`.
+
+
 
 
 

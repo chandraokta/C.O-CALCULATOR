@@ -173,6 +173,7 @@ Buka dengan `MENU` (portrait maupun landscape).
 
 | Fitur | Pilihan | Contoh |
 |---|---|---|
+| Bahasa / Language | INDONESIA / ENGLISH | mengganti bahasa menu Pengaturan saja |
 | Tema | GRAFIT / PERAK / TENGAH MALAM | mengganti warna body dan tombol |
 | Mode sudut | DERAJAT / RADIAN / GRADIAN | `sin 30 =` → 0,5 di DERAJAT |
 | Format angka | AUTO / FIX / SCI / ENG | `1 ÷ 3 =` → 0,3333 di FIX 4 |
@@ -225,6 +226,7 @@ Putar perangkat; konfigurasi dan hasil tidak hilang.
 
 Jika ada hasil yang tidak sesuai, sertakan urutan tombol dan hasil yang muncul saat
 melaporkan masalah.
+
 
 
 
