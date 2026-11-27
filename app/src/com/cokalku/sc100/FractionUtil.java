@@ -14,6 +14,15 @@ public final class FractionUtil {
      * Returns null for integers, irrational-looking values and very large denominators.
      */
     public static String toMixed(BigDecimal value) {
+        return format(value, false);
+    }
+
+    /** Returns an improper fraction such as "5/2", or null when no simple fraction exists. */
+    public static String toImproper(BigDecimal value) {
+        return format(value, true);
+    }
+
+    private static String format(BigDecimal value, boolean improper) {
         if (value == null || value.signum() == 0) return null;
         double x = Math.abs(value.doubleValue());
         if (!Double.isFinite(x) || x > 1e12) return null;
@@ -45,8 +54,10 @@ public final class FractionUtil {
         long whole = p1 / q1;
         long rem = p1 % q1;
         String sign = negative ? "-" : "";
+        if (improper) return sign + p1 + "/" + q1;
         if (whole == 0) return sign + rem + "/" + q1;
         if (rem == 0) return sign + whole;
         return sign + whole + " " + rem + "/" + q1;
     }
 }
+

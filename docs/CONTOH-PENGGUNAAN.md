@@ -192,6 +192,7 @@ Buka dengan `MENU` (portrait maupun landscape).
 | Format angka | AUTO / FIX / SCI / ENG | `1 ÷ 3 =` → 0,3333 di FIX 4 |
 | Tanda desimal | KOMA / TITIK | `1 ÷ 1000 =` → 0,001 / 0.001 |
 | Jumlah digit | 2, 3, 4, 5, 6, 8, 10 | jumlah digit desimal |
+| Bentuk pecahan | CAMPURAN / BIASA | `2 1/2` / `5/2` |
 | Pemisah ribuan | AKTIF/NONAKTIF | 1.234.567 / 1234567 |
 | Getar | AKTIF/NONAKTIF | getar saat tombol ditekan |
 | Kekuatan getar | 20%–100% | default 100% |
@@ -239,6 +240,7 @@ Putar perangkat; konfigurasi dan hasil tidak hilang.
 
 Jika ada hasil yang tidak sesuai, sertakan urutan tombol dan hasil yang muncul saat
 melaporkan masalah.
+
 
 
 

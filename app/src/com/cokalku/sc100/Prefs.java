@@ -48,6 +48,10 @@ public final class Prefs {
     public boolean settingsEnglish() { return sp.getBoolean("settingsEnglish", false); }
     public void setSettingsEnglish(boolean v) { sp.edit().putBoolean("settingsEnglish", v).apply(); }
 
+    /** true = improper fraction (5/2); false = mixed fraction (2 1/2). */
+    public boolean fractionImproper() { return sp.getBoolean("fractionImproper", false); }
+    public void setFractionImproper(boolean v) { sp.edit().putBoolean("fractionImproper", v).apply(); }
+
     /** true = decimal comma (0,5); false = decimal dot (0.5). Default comma. */
     public boolean decimalComma() { return sp.getBoolean("decimalComma", true); }
     public void setDecimalComma(boolean v) { sp.edit().putBoolean("decimalComma", v).apply(); }
@@ -119,6 +123,7 @@ public final class Prefs {
 
     public void clearHistory() { sp.edit().putString("history", "[]").apply(); }
 }
+
 
 
 

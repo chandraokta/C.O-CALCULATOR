@@ -1,7 +1,7 @@
 # C.O CALCULATOR SC-100
 
 **Repository:** [github.com/chandraokta/C.O-CALCULATOR](https://github.com/chandraokta/C.O-CALCULATOR)  
-**Latest release:** [v2.2 — C.O CALCULATOR](https://github.com/chandraokta/C.O-CALCULATOR/releases/tag/v2.2)
+**Latest release:** [v2.3 — C.O CALCULATOR](https://github.com/chandraokta/C.O-CALCULATOR/releases/tag/v2.3)
 
 A new Android scientific calculator with the tactile, physical-instrument feel of a classic
 pocket calculator. The product and interface are original; the feature set and the level of
@@ -69,8 +69,8 @@ Panduan lengkap semua tombol, fitur, dan contoh perhitungan ada di
   multiplication (`2π`, `2(3+4)`).
 - **Scientific functions:** sin, cos, tan, inverse and hyperbolic variants, `ln`, `log`,
   `eˣ`, `10ˣ`, powers, nth roots, square/cube roots, reciprocal, factorial, `nCr`, `nPr`, `mod`.
-- **Fractions:** `SHIFT` + `÷` (`a b/c`) for input; results simplify and display as mixed
-  fractions such as `1/2` or `2 1/2`.
+- **Fractions:** `SHIFT` + `÷` (`a b/c`) for input; results simplify and can display as
+  mixed (`2 1/2`) or improper (`5/2`) fractions via Settings.
 - **Function-first entry:** press `sin`, then `30`, then `=` — the app closes the
   parenthesis for you. The expression line above the result is twice as large as before.
 - **Angle modes:** degrees, radians and grads.
@@ -165,6 +165,8 @@ Feature and interaction inspiration: [RealCalc Scientific Calculator on Google P
 and the APK supplied in this workspace for study. The seven-segment typeface is
 [DSEG7 Classic](https://github.com/keshikan/DSEG) (SIL Open Font License); its license is
 included at `app/assets/fonts/DSEG-OFL.txt`; the runtime copy is `app/res/raw/dseg.ttf`.
+
+
 
 
 

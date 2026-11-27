@@ -175,8 +175,9 @@ Tombol pecahan adalah `SHIFT` + `÷` (legenda kuning `a b/c`).
 | Campuran | `2` `+` `1` `SHIFT` `÷` `2` `=` | 2 1/2 |
 | Pecahan dalam kurung | `(` `1` `+` `2` `)` `SHIFT` `÷` `(` `3` `+` `4` `)` `=` | 3/7 |
 
-Hasil pecahan ditampilkan dalam bentuk campuran. Jika hasilnya bukan pecahan rasional
-sederhana, LCD kembali menampilkan desimal.
+Bentuk hasil pecahan dapat dipilih di **PENGATURAN → Bentuk pecahan**:
+**CAMPURAN** (`2 1/2`, default) atau **BIASA** (`5/2`). Jika hasilnya bukan pecahan
+rasional sederhana, LCD kembali menampilkan desimal.
 
 ---
 
@@ -321,6 +322,7 @@ Buka dengan tombol `MENU` di baris utilitas, baik portrait maupun landscape.
 | **Format angka** | AUTO, FIX, SCI, ENG |
 | **Tanda desimal** | KOMA (`0,001`) atau TITIK (`0.001`) — default KOMA |
 | **Jumlah digit** | 2, 3, 4, 5, 6, 8, 10 |
+| **Bentuk pecahan** | CAMPURAN (`2 1/2`) atau BIASA (`5/2`) — default CAMPURAN |
 | **Pemisah ribuan** | AKTIF/NONAKTIF |
 | **Getar** | AKTIF/NONAKTIF — default AKTIF |
 | **Kekuatan getar** | 20%, 40%, 60%, 80%, 100% — default 100% |
@@ -404,6 +406,7 @@ Contoh lain yang sudah diuji:
 - [Desain FigCraft](../design/cokalku-sc100.figcraft)
 - [Screenshot aplikasi](../design/app)
 - [Build script](../app/build.ps1)
+
 
 
 
